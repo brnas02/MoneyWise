@@ -7,6 +7,37 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DWebProjetoFinal.styles.css" asp-append-version="true" />
+    <style>
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .dark-mode .navbar {
+            background-color: #222 !important;
+            border-bottom: 1px solid #444;
+        }
+
+        .dark-mode .nav-link,
+        .dark-mode .navbar-brand {
+            color: #ffffff !important;
+        }
+
+        .custom-switch label {
+            white-space: nowrap;
+        }
+
+        .custom-switch .form-check-input {
+            margin: 0 8px;
+            transform: scale(1.2);
+        }
+
+        /* Mudar a cor do switch quando estiver ativado */
+        .custom-switch .form-check-input:checked {
+                background-color: #A9A9A9 !important; /* Cor verde */
+                border-color: #A9A9A9 !important; /* Bordas verdes */
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -20,12 +51,17 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
+                    <div class="form-check form-switch d-flex align-items-center custom-switch">
+                        <label class="form-check-label me-2" for="themeSwitch">Light Mode</label>
+                        <input class="form-check-input" type="checkbox" id="themeSwitch">
+                        <label class="form-check-label ms-2" for="themeSwitch">Dark Mode</label>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -41,6 +77,22 @@
             &copy; 2025 - MoneyWise
         </div>
     </footer>
+    <script type="text/javascript">
+        const switchButton = document.getElementById('themeSwitch');
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+
+        switchButton.addEventListener('change', toggleTheme);
+
+        // Carregar tema salvo
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            switchButton.checked = true;
+        }
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
