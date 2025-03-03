@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MoneyWise</title>
+    <title>MoneyWise</title>
+    <link rel="icon" type="image/png" href="mwicon.ico">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DWebProjetoFinal.styles.css" asp-append-version="true" />
@@ -32,10 +33,9 @@
             transform: scale(1.2);
         }
 
-        /* Mudar a cor do switch quando estiver ativado */
         .custom-switch .form-check-input:checked {
-                background-color: #A9A9A9 !important; /* Cor verde */
-                border-color: #A9A9A9 !important; /* Bordas verdes */
+                background-color: #A9A9A9 !important;
+                border-color: #A9A9A9 !important;
         }
     </style>
 </head>
@@ -43,7 +43,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MoneyWise</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="https://moneywisemortgage.com/wp-content/uploads/2022/04/MW-SiteIcon.png" alt="MoneyWise Logo" height="40">
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -87,7 +89,6 @@
 
         switchButton.addEventListener('change', toggleTheme);
 
-        // Carregar tema salvo
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
             switchButton.checked = true;
