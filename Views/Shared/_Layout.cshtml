@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DWebProjetoFinal.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         body.dark-mode {
             background-color: #121212;
@@ -33,10 +34,22 @@
             transform: scale(1.2);
         }
 
-        .custom-switch .form-check-input:checked {
+            .custom-switch .form-check-input:checked {
                 background-color: #A9A9A9 !important;
                 border-color: #A9A9A9 !important;
+            }
+
+        .theme-icon {
+            font-size: 20px;
         }
+
+            .theme-icon.sun {
+                color: #FFA500;
+            }
+
+            .theme-icon.moon {
+                color: #B0C4DE;
+            }
     </style>
 </head>
 <body>
@@ -60,9 +73,9 @@
                         </li>
                     </ul>
                     <div class="form-check form-switch d-flex align-items-center custom-switch">
-                        <label class="form-check-label me-2" for="themeSwitch">Light Mode</label>
+                        <i class="fas fa-sun theme-icon sun me-2"></i>
                         <input class="form-check-input" type="checkbox" id="themeSwitch">
-                        <label class="form-check-label ms-2" for="themeSwitch">Dark Mode</label>
+                        <i class="fas fa-moon theme-icon moon ms-2"></i>
                         @await Html.PartialAsync("_LoginPartial")
                     </div>
                 </div>
@@ -83,6 +96,7 @@
     <script type="text/javascript">
         const switchButton = document.getElementById('themeSwitch');
 
+        // Função para alternar entre os modos claro e escuro
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -90,6 +104,7 @@
 
         switchButton.addEventListener('change', toggleTheme);
 
+        // Definir o tema baseado na preferência salva no localStorage
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
             switchButton.checked = true;
