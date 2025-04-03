@@ -33,6 +33,7 @@ namespace DWebProjetoFinal.Controllers {
                 account.LastName = model.LastName;
                 account.Password = model.Password;
                 account.UserName = model.UserName;
+                account.Role = model.Role;
 
                 try{
                     _context.UserAccounts.Add(account);

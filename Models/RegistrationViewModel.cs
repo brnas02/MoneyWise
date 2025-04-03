@@ -30,5 +30,8 @@ namespace DWebProjetoFinal.Models
         [Required(ErrorMessage = "Please confirm your password.")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Please select a role.")]
+        public string Role { get; set; }
     }
 }

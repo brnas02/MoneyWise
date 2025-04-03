@@ -29,5 +29,8 @@ namespace DWebProjetoFinal.Entities {
         [Required(ErrorMessage = "Password is required.")]
         [MaxLength(20, ErrorMessage = "Max 20 characters allowed.")]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "Role is required.")]
+        public string Role { get; set; }
     }
 }
