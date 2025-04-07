@@ -7,7 +7,7 @@ namespace DWebProjetoFinal.Entities {
         public DbSet<UserAccount> UserAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            modelBuilder.Entity<UserAccount>().Property(u => u.Role).IsRequired();
+            modelBuilder.Entity<UserAccount>().Property(u => u.Type).IsRequired();
             base.OnModelCreating(modelBuilder);
         }
     }

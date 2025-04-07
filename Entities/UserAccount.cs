@@ -31,6 +31,6 @@ namespace DWebProjetoFinal.Entities {
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Role is required.")]
-        public string Role { get; set; }
+        public int Type { get; set; }
     }
 }
