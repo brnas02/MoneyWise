@@ -32,5 +32,8 @@ namespace DWebProjetoFinal.Entities {
 
         [Required(ErrorMessage = "Role is required.")]
         public int Type { get; set; }
+
+        [MaxLength(255, ErrorMessage = "Max 255 characters allowed.")]
+        public string? ProfileImagePath { get; set; }
     }
 }

@@ -33,5 +33,7 @@ namespace DWebProjetoFinal.Models
 
         [Required(ErrorMessage = "Please select a role.")]
         public int Type { get; set; }
+
+        public IFormFile ProfileImage { get; set; }
     }
 }

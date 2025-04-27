@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.IO;
 
 namespace DWebProjetoFinal.Controllers {
     public class AccountController : Controller {
@@ -24,31 +25,55 @@ namespace DWebProjetoFinal.Controllers {
         }
 
         [HttpPost]
-        public IActionResult Registration(RegistrationViewModel model) {
+        public async Task<IActionResult> Registration(RegistrationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = null;
 
-            if (ModelState.IsValid){
-                UserAccount account = new UserAccount();
-                account.Email = model.Email;
-                account.FirstName = model.FirstName;
-                account.LastName = model.LastName;
-                account.Password = model.Password;
-                account.UserName = model.UserName;
-                account.Type = model.Type;
+                // Verifica se o utilizador fez upload da imagem
+                if (model.ProfileImage != null && model.ProfileImage.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                    Directory.CreateDirectory(uploadsFolder); // Garante que a pasta existe
 
-                try{
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ProfileImage.CopyToAsync(stream);
+                    }
+                }
+
+                UserAccount account = new UserAccount
+                {
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Password = model.Password,
+                    UserName = model.UserName,
+                    Type = model.Type,
+                    ProfileImagePath = uniqueFileName != null ? "/uploads/" + uniqueFileName : null
+                };
+
+                try
+                {
                     _context.UserAccounts.Add(account);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
                     ModelState.Clear();
                     ViewBag.Message = $"{account.FirstName} {account.LastName} registered successfully. Please login";
-
                 }
-                catch (DbUpdateException ex) {
+                catch (DbUpdateException ex)
+                {
                     ModelState.AddModelError("", "Please enter unique Email or Password");
                     return View(model);
                 }
+
                 return View();
             }
+
             return View(model);
         }
 
@@ -63,6 +88,7 @@ namespace DWebProjetoFinal.Controllers {
                 if (user != null) {
                     //Success, create cookie
                     var claims = new List<Claim>{
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.UserName),
                         new Claim("Name", user.FirstName),
                         new Claim(ClaimTypes.Role, "User"),
