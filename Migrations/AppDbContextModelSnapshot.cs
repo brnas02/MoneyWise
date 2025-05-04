@@ -86,13 +86,10 @@ namespace DWebProjetoFinal.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-<<<<<<< Updated upstream
-=======
                     b.Property<string>("ProfileImagePath")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
->>>>>>> Stashed changes
                     b.Property<int>("Type")
                         .HasColumnType("int");
 

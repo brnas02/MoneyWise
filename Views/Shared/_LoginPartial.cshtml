@@ -5,20 +5,26 @@
 {
     var user = await _context.UserAccounts.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-    var userProfileImage = "/logo.png"; // imagem padrão caso o utilizador não tenha feito upload
+    var userProfileImage = "/logo.png";
 
     if (user != null && !string.IsNullOrEmpty(user.ProfileImagePath))
     {
         userProfileImage = user.ProfileImagePath;
     }
 
-    <form asp-controller="Account" asp-action="LogOut" method="post" id="logoutForm" class="navbar-right d-flex align-items-center">
+    <div class="navbar-right d-flex align-items-center">
         <span class="me-2">@user?.FirstName @user?.LastName</span>
-        <img src="@userProfileImage" alt="Profile Image" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;" />
-        <button type="submit" class="btn logout-btn">
-            <i class="fas fa-play fa-flip-horizontal"></i> LOGOUT
-        </button>
-    </form>
+
+        <a asp-controller="Account" asp-action="Edit" style="margin-right: 10px;">
+            <img src="@userProfileImage" alt="Profile Image" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+        </a>
+
+        <form asp-controller="Account" asp-action="LogOut" method="post" id="logoutForm">
+            <button type="submit" class="btn logout-btn">
+                <i class="fas fa-play fa-flip-horizontal"></i> LOGOUT
+            </button>
+        </form>
+    </div>
 }
 else
 {

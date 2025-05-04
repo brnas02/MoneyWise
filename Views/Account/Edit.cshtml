@@ -1,0 +1,42 @@
+﻿@model DWebProjetoFinal.Entities.UserAccount
+
+@{
+    ViewData["Title"] = "Editar Perfil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Editar Perfil</h1>
+
+<div class="card p-4 mt-4">
+    <form asp-controller="Account" asp-action="Edit" method="post" enctype="application/x-www-form-urlencoded">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label">Primeiro Nome</label>
+            <input asp-for="FirstName" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label">Último Nome</label>
+            <input asp-for="LastName" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="UserName" class="form-label">Nome de Utilizador</label>
+            <input asp-for="UserName" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-dark">Guardar Alterações</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
