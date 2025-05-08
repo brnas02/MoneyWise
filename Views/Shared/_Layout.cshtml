@@ -283,5 +283,16 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        // Força a validação a aceitar vírgula como separador decimal
+        $.validator.methods.number = function (value, element) {
+            value = value.replace(",", ".");
+            return this.optional(element) || !isNaN(value);
+        };
+    </script>
 </body>
 </html>

@@ -1,45 +1,79 @@
 ﻿using DWebProjetoFinal.Entities;
-using DWebProjetoFinal.Models; 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace DWebProjetoFinal.Controllers
 {
-    public class TransacaoController : Controller {
+    [Authorize]
+    public class TransacaoController : Controller
+    {
         private readonly AppDbContext _context;
 
-        public TransacaoController(AppDbContext context) {
+        public TransacaoController(AppDbContext context)
+        {
             _context = context;
         }
 
-        // GET: Transaction/NewTransaction
-        [Authorize]
-        public IActionResult NovaTransacao() {
+        [HttpGet]
+        public IActionResult NovaTransacao()
+        {
             return View();
         }
 
-        // POST: Transaction/NewTransaction
         [HttpPost]
-        [Authorize]
-        public IActionResult NovaTransacao(Transacao model) {
-            if (ModelState.IsValid) {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        [ValidateAntiForgeryToken]
+        public IActionResult NovaTransacao(Transacao model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
 
-                if (string.IsNullOrEmpty(userIdClaim)) {
-                    return Unauthorized();
-                }
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                model.UserId = int.Parse(userIdClaim); // Liga a transação ao utilizador autenticado
+            if (string.IsNullOrEmpty(userIdClaim))
+                return Unauthorized();
 
-                _context.Transactions.Add(model);
-                _context.SaveChanges();
+            model.UserId = int.Parse(userIdClaim);
+            _context.Transactions.Add(model);
+            _context.SaveChanges();
 
-                return RedirectToAction("Index", "Home"); // Ou voltar para lista de transações
+            return RedirectToAction("Historico");
+        }
+
+        [HttpGet]
+        public IActionResult Historico()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim))
+                return Unauthorized();
+
+            int userId = int.Parse(userIdClaim);
+            var transacoes = _context.Transactions
+                .Where(t => t.UserId == userId)
+                .OrderByDescending(t => t.Data)
+                .ToList();
+
+            return View(transacoes);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Eliminar(int id)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var transacao = _context.Transactions.FirstOrDefault(t => t.Id == id && t.UserId == userId);
+            if (transacao == null)
+            {
+                return NotFound();
             }
 
-            return View(model);
+            _context.Transactions.Remove(transacao);
+            _context.SaveChanges();
+
+            return RedirectToAction("Historico");
         }
+
     }
 }

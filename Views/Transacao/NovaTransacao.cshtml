@@ -9,6 +9,18 @@
 
 <div class="card p-4 mt-4">
     <form asp-action="NovaTransacao" method="post">
+        @Html.AntiForgeryToken()
+
+        @if (!ViewData.ModelState.IsValid) {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors)) {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
+
         <div class="row mb-3">
             <div class="col-md-3">
                 <label asp-for="TipoTransacao" class="form-label">Tipo de Transação</label>
@@ -16,11 +28,13 @@
                     <option value="Receita">Receita</option>
                     <option value="Despesa">Despesa</option>
                 </select>
+                <span asp-validation-for="TipoTransacao" class="text-danger"></span>
             </div>
 
             <div class="col-md-3">
                 <label asp-for="Categoria" class="form-label">Categoria</label>
                 <input asp-for="Categoria" class="form-control" placeholder="Inserir" />
+                <span asp-validation-for="Categoria" class="text-danger"></span>
             </div>
 
             <div class="col-md-3">
@@ -29,11 +43,13 @@
                     <span class="input-group-text">€</span>
                     <input asp-for="Valor" class="form-control" />
                 </div>
+                <span asp-validation-for="Valor" class="text-danger"></span>
             </div>
 
             <div class="col-md-3">
                 <label asp-for="Descricao" class="form-label">Descrição (Opcional)</label>
                 <input asp-for="Descricao" class="form-control" placeholder="Inserir" />
+                <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>
         </div>
 
@@ -41,6 +57,7 @@
             <div class="col-md-3">
                 <label asp-for="Data" class="form-label">Data</label>
                 <input asp-for="Data" class="form-control" type="date" />
+                <span asp-validation-for="Data" class="text-danger"></span>
             </div>
         </div>
 
