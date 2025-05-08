@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 namespace DWebProjetoFinal.Controllers{
-    public class RelatoriosController : Controller{
+    public class ReportsController : Controller{
         public IActionResult Index(){
             return View();
         }

@@ -6,7 +6,7 @@ namespace DWebProjetoFinal.Entities {
 
         public DbSet<UserAccount> UserAccounts { get; set; }
 
-        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Transacao> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<UserAccount>().Property(u => u.Type).IsRequired();

@@ -1,5 +1,5 @@
-﻿using DWebProjetoFinal.Entities; // Para aceder à entidade Transaction
-using DWebProjetoFinal.Models;    // (se usarmos ViewModel)
+﻿using DWebProjetoFinal.Entities;
+using DWebProjetoFinal.Models; 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,23 +7,23 @@ using System.Security.Claims;
 
 namespace DWebProjetoFinal.Controllers
 {
-    public class TransactionController : Controller {
+    public class TransacaoController : Controller {
         private readonly AppDbContext _context;
 
-        public TransactionController(AppDbContext context) {
+        public TransacaoController(AppDbContext context) {
             _context = context;
         }
 
         // GET: Transaction/NewTransaction
         [Authorize]
-        public IActionResult NewTransaction() {
+        public IActionResult NovaTransacao() {
             return View();
         }
 
         // POST: Transaction/NewTransaction
         [HttpPost]
         [Authorize]
-        public IActionResult NewTransaction(Transaction model) {
+        public IActionResult NovaTransacao(Transacao model) {
             if (ModelState.IsValid) {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 

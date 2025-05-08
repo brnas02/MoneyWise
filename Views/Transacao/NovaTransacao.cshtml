@@ -1,4 +1,4 @@
-﻿@model DWebProjetoFinal.Entities.Transaction
+﻿@model DWebProjetoFinal.Entities.Transacao
 
 @{
     ViewData["Title"] = "Nova Transação";
@@ -8,7 +8,7 @@
 <h1>Nova Transação</h1>
 
 <div class="card p-4 mt-4">
-    <form asp-action="NewTransaction" method="post">
+    <form asp-action="NovaTransacao" method="post">
         <div class="row mb-3">
             <div class="col-md-3">
                 <label asp-for="TipoTransacao" class="form-label">Tipo de Transação</label>

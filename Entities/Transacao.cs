@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DWebProjetoFinal.Entities {
-    public class Transaction {
+    public class Transacao {
         [Key]
         public int Id { get; set; }
 
