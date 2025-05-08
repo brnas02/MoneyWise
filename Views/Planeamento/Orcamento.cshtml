@@ -1,0 +1,55 @@
+﻿@model List<DWebProjetoFinal.Entities.Orcamento>
+
+@{
+    ViewData["Title"] = "Orçamento";
+}
+
+<h1>Orçamento</h1>
+
+<form asp-action="Orcamento" method="post" class="card p-3 mb-4">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Categoria</label>
+            <input name="Categoria" class="form-control" required />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Limite (€)</label>
+            <input name="Limite" type="number" step="0.01" class="form-control" required />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Mês</label>
+            <input name="MesReferencia" type="month" class="form-control" required />
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-dark btn-sm px-4 py-2">Adicionar Orçamento</button>
+    </div>
+</form>
+
+@if (Model.Any()) {
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Categoria</th>
+                <th>Limite</th>
+                <th>Mês</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var orc in Model) {
+                <tr>
+                    <td>@orc.Categoria</td>
+                    <td>@orc.Limite.ToString("C")</td>
+                    <td>@orc.MesReferencia.ToString("yyyy-MM")</td>
+                    <td>
+                        <form asp-action="ApagarOrcamento" method="post" asp-controller="Planeamento">
+                            <input type="hidden" name="id" value="@orc.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}

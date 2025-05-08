@@ -6,6 +6,13 @@ namespace DWebProjetoFinal.Entities {
 
         public DbSet<UserAccount> UserAccounts { get; set; }
 
+<<<<<<< Updated upstream
+=======
+        public DbSet<Transacao> Transactions { get; set; }
+
+        public DbSet<Orcamento> Orcamentos { get; set; }
+
+>>>>>>> Stashed changes
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<UserAccount>().Property(u => u.Type).IsRequired();
             base.OnModelCreating(modelBuilder);
