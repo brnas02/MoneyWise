@@ -34,7 +34,7 @@ namespace DWebProjetoFinal.Controllers
                 return Unauthorized();
 
             model.UserId = int.Parse(userIdClaim);
-            _context.Transacoes.Add(model);
+            _context.Transactions.Add(model);
             _context.SaveChanges();
 
             return RedirectToAction("Historico");
@@ -63,13 +63,13 @@ namespace DWebProjetoFinal.Controllers
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            var transacao = _context.Transacoes.FirstOrDefault(t => t.Id == id && t.UserId == userId);
+            var transacao = _context.Transactions.FirstOrDefault(t => t.Id == id && t.UserId == userId);
             if (transacao == null)
             {
                 return NotFound();
             }
 
-            _context.Transacoes.Remove(transacao);
+            _context.Transactions.Remove(transacao);
             _context.SaveChanges();
 
             return RedirectToAction("Historico");
