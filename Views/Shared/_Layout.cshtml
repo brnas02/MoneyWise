@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -70,14 +70,15 @@
             }
 
         #theme-icon {
-            color: #FFA500; /* Sol por padrão */
+            color: #FFA500;
             transition: color 0.3s ease;
         }
 
         .dark-mode #theme-icon {
-            color: #B0C4DE; /* Lua quando estiver no modo escuro */
+            color: #B0C4DE;
         }
 
+        /* Modificações para os botões */
         .btn {
             display: flex;
             align-items: center;
@@ -86,162 +87,214 @@
             border-radius: 10px;
             padding: 2px 8px;
             font-size: 16px;
-            transition: all 0.3s ease;
             text-transform: uppercase;
             gap: 8px;
         }
 
-        /* Botões no light mode */
-        .login-btn {
-            color: #000000;
+        .btn:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            border-color: #b7b7b7 !important;
+        }
+
+        .login-btn, .logout-btn, .register-btn {
+            border: 2px solid transparent;
+        }
+
+        /* Estilo dos botões no modo claro */
+        .login-btn, .logout-btn, .register-btn {
+            color: #ffffff;
+            background-color: #000000;
             border: 2px solid #000000;
         }
 
-            .login-btn:hover {
-                background-color: #000000;
-                color: #ffffff;
-            }
-
-        .logout-btn {
+        /* Estilos para modo escuro */
+        .dark-mode .login-btn, .dark-mode .logout-btn, .dark-mode .register-btn {
             color: #000000;
+            background-color: #ffffff;
+            border: 2px solid #ffffff;
+        }
+
+        .login-btn:hover, .logout-btn:hover, .register-btn:hover {
+            background-color: #000000;
+            color: #ffffff;
             border: 2px solid #000000;
         }
 
-            .logout-btn:hover {
-                background-color: #000000;
-                color: #ffffff;
-            }
-
-        .register-btn {
+        .dark-mode .login-btn:hover, .dark-mode .logout-btn:hover, .dark-mode .register-btn:hover {
+            background-color: #ffffff;
             color: #000000;
-            border: 2px solid #000000;
-        }
-
-            .register-btn:hover {
-                background-color: #000000;
-                color: #ffffff;
-            }
-
-        /* Botões no dark mode */
-        .dark-mode .login-btn {
-            color: #ffffff;
             border: 2px solid #ffffff;
         }
-
-            .dark-mode .login-btn:hover {
-                background-color: #ffffff;
-                color: #000000;
-            }
-
-        .dark-mode .register-btn {
-            color: #ffffff;
-            border: 2px solid #ffffff;
-        }
-
-            .dark-mode .register-btn:hover {
-                background-color: #ffffff;
-                color: #000000;
-            }
-
-        .dark-mode .logout-btn {
-            color: #ffffff;
-            border: 2px solid #ffffff;
-        }
-
-            .dark-mode .logout-btn:hover {
-                background-color: #ffffff;
-                color: #000000;
-            }
 
         .navbar {
-            border-radius: 15px; /* Cantos arredondados */
-            margin: 10px 20px; /* Distância do topo e das laterais */
-            padding: 10px 20px; /* Espaçamento interno */
-            background-color: white !important; /* Mantém o fundo visível */
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
-            border: 1px solid #ddd; /* Borda suave para realce */
+            border-radius: 15px; 
+            margin: 10px 20px; 
+            padding: 10px 20px; 
+            background-color: white !important; 
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+            border: 1px solid #ddd; 
         }
 
         .footer {
-            border-radius: 15px; /* Cantos arredondados */
-            margin: 10px 20px; /* Distância do topo e das laterais */
-            padding: 10px 20px; /* Espaçamento interno */
-            max-width: 98%; /* Tem de ser alterado */
-            background-color: white !important; /* Mantém o fundo visível */
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
-            border: 1px solid #ddd; /* Borda suave para realce */
+            border-radius: 15px; 
+            margin: 10px 20px; 
+            padding: 10px 20px; 
+            max-width: 98%; 
+            background-color: white !important; 
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+            border: 1px solid #ddd; 
+        }
+
+        .input-group .form-control {
+            border: 1px solid #b7b7b7 !important;
+            border-radius: 10px !important;
+            padding-left: 10px;
+        }
+
+            .input-group .form-control:focus {
+                outline: none !important;
+                box-shadow: none !important;
+                border-color: #b7b7b7 !important;
+            }
+
+        .navbar .btn-light {
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            color: #000000 !important;
+            background-color: #ffffff;
+        }
+
+            .navbar .btn-light:hover {
+                background-color: #f8f9fa;
+                color: #000000 !important;
+            }
+
+        .navbar .dropdown-toggle::after {
+            margin-left: 5px;
+        }
+
+        .dropdown-menu {
+            border-radius: 10px;
         }
 
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/logo.png" alt="MoneyWise Logo" height="40">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <img src="~/logo.png" alt="Logo" width="30" height="30" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <div class="theme-toggle">
-                        <i id="theme-icon" class="fas fa-sun"></i>
+
+                <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="btn btn-light mx-2" asp-controller="Home" asp-action="Index">Dashboard</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="btn btn-light mx-2 dropdown-toggle" href="#" id="transacoesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Transações
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="transacoesDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Transacao" asp-action="NovaTransacao">Nova Transação</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Transacao" asp-action="Historico">Histórico</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="btn btn-light mx-2 dropdown-toggle" href="#" id="planeamentoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Planeamento
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="planeamentoDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Planeamento" asp-action="Metas">Metas</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Planeamento" asp-action="Orcamento">Orçamento</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="btn btn-light mx-2 dropdown-toggle" href="#" id="relatorioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Relatório
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="relatorioDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Relatorios" asp-action="Mensal">Mensal</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Relatorios" asp-action="Anual">Anual</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+
+                    <div class="d-flex align-items-center ms-auto">
+                        <div class="theme-toggle me-3">
+                            <i id="theme-icon" class="fas fa-sun"></i>
+                        </div>
+                        @await Html.PartialAsync("_LoginPartial")
                     </div>
-                    @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div style="padding-top: 90px;" class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer text-muted mt-5">
         <div class="container">
             &copy; 2025 - MoneyWise
         </div>
     </footer>
-    <script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        const themeIcon = document.getElementById("theme-icon");
-        const body = document.body;
 
-        // Verifica se há um tema salvo no localStorage e aplica
-        if (localStorage.getItem("theme") === "dark") {
-            body.classList.add("dark-mode");
-            themeIcon.classList.replace("fa-sun", "fa-moon");
-        }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const themeIcon = document.getElementById("theme-icon");
+            const body = document.body;
 
-        // Ao clicar no ícone, alterna entre os modos
-        themeIcon.addEventListener("click", function () {
-            if (body.classList.contains("dark-mode")) {
-                body.classList.remove("dark-mode");
-                themeIcon.classList.replace("fa-moon", "fa-sun");
-                localStorage.setItem("theme", "light");
-            } else {
+            if (localStorage.getItem("theme") === "dark") {
                 body.classList.add("dark-mode");
                 themeIcon.classList.replace("fa-sun", "fa-moon");
-                localStorage.setItem("theme", "dark");
             }
+
+            themeIcon.addEventListener("click", function () {
+                if (body.classList.contains("dark-mode")) {
+                    body.classList.remove("dark-mode");
+                    themeIcon.classList.replace("fa-moon", "fa-sun");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    body.classList.add("dark-mode");
+                    themeIcon.classList.replace("fa-sun", "fa-moon");
+                    localStorage.setItem("theme", "dark");
+                }
+            });
         });
-    });
-</script>
+    </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        // Força a validação a aceitar vírgula como separador decimal
+        $.validator.methods.number = function (value, element) {
+            value = value.replace(",", ".");
+            return this.optional(element) || !isNaN(value);
+        };
+    </script>
 </body>
 </html>

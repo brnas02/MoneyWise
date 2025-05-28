@@ -10,41 +10,50 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Registration">
+        <form asp-action="Registration" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @if (ViewBag.Message != null){
+
+            @if (ViewBag.Message != null)
+            {
                 <div class="form-group" style="color: white;">@ViewBag.Message</div>
             }
+
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="ConfirmPassword" class="control-label"></label>
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Type">Role</label>
                 <select asp-for="Type" class="form-control">
@@ -52,7 +61,14 @@
                     <option value="1">Pessoal</option>
                     <option value="2">Empresarial</option>
                 </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="ProfileImage" class="control-label">Foto de Perfil</label>
+                <input asp-for="ProfileImage" type="file" class="form-control" />
+                <span asp-validation-for="ProfileImage" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Register" class="btn btn-primary" />
             </div>
@@ -65,5 +81,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
