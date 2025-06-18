@@ -238,5 +238,19 @@ namespace DWebProjetoFinal.Controllers
 
             return RedirectToAction("AdminUserList");
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteUser(int id)
+        {
+            var user = _context.UserAccounts.FirstOrDefault(u => u.Id == id);
+            if (user != null)
+            {
+                _context.UserAccounts.Remove(user);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("AdminUserList");
+        }
     }
 }

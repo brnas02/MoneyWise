@@ -49,6 +49,12 @@
                                     @(user.IsActive ? "Desativar" : "Ativar")
                                 </button>
                             </form>
+
+                            <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post" onsubmit="return confirm('Tem a certeza que deseja eliminar este utilizador?');" style="display:inline;">
+                                <button type="submit" class="btn btn-outline-danger btn-sm delete-btn">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>
@@ -88,5 +94,22 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         border: 1px solid #eee;
         background-color: #fff;
+    }
+
+    .btn-outline-danger {
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-weight: 500;
+    }
+
+    .delete-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 14px; /* igual ao botão de editar */
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-weight: 500;
+        height: 34px; /* garante altura igual */
     }
 </style>
