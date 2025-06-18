@@ -58,6 +58,11 @@ namespace DWebProjetoFinal.Controllers
                 })
                 .ToList();
 
+            var metas = _context.Metas
+                .Where(m => m.UserId == userId)
+                .OrderBy(m => m.DataLimite)
+                .ToList();
+
             List<object> saldoAcumulado = new();
             decimal saldoAtual = 0;
 
@@ -72,6 +77,7 @@ namespace DWebProjetoFinal.Controllers
             ViewBag.Saldo = saldo;
             ViewBag.Categorias = categoriasDespesa;
             ViewBag.Diario = saldoAcumulado;
+            ViewBag.Metas = metas;
 
             return View();
         }

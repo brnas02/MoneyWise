@@ -1,46 +1,86 @@
 ﻿@model List<DWebProjetoFinal.Entities.Orcamento>
 
-<h2>Orçamento Mensal</h2>
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        <h4 class="mb-4">Adicionar Orçamento</h4>
+        <form asp-action="CriarOrcamento" method="post" class="row g-3 align-items-end">
+            <!-- Categoria -->
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Categoria</label>
+                <input name="Categoria" class="form-control border-0 border-bottom rounded-0" required
+                       placeholder="Inserir" style="background: #f8f9fa;" />
+            </div>
 
-<form asp-action="CriarOrcamento" method="post">
-    <div class="form-group">
-        <label>Categoria</label>
-        <input name="Categoria" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Limite Mensal (€)</label>
-        <input name="LimiteMensal" type="number" step="0.01" class="form-control" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Salvar</button>
-</form>
+            <!-- Limite Mensal -->
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Limite Mensal (€)</label>
+                <input name="LimiteMensal" type="number" step="0.01"
+                       class="form-control border-0 border-bottom rounded-0" required
+                       placeholder="Inserir" style="background: #f8f9fa;" />
+            </div>
 
-<table class="table mt-4">
-    <thead>
-        <tr>
-            <th>Categoria</th>
-            <th>Limite</th>
-            <th>Gasto Atual</th>
-            <!-- NOVA COLUNA PARA AÇÕES -->
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var orcamento in Model)
-        {
-            <tr>
-                <td>@orcamento.Categoria</td>
-                <td>@orcamento.LimiteMensal.ToString("C")</td>
-                <td>@orcamento.GastoAtual.ToString("C")</td>
-                <!-- NOVO BOTÃO DE ELIMINAR -->
-                <td>
-                    <form asp-action="EliminarOrcamento" method="post" onsubmit="return confirm('Tem certeza?');">
-                        <input type="hidden" name="id" value="@orcamento.Id" />
-                        <button type="submit" class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash-alt"></i> Eliminar
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <!-- Espaço reservado para futuros campos -->
+            <div class="col-md-3">
+                <!-- Pode ser usado para adicionar outro campo no futuro -->
+            </div>
+
+            <!-- Botão Salvar -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                    SALVAR
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabela de Orçamentos -->
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h4 class="mb-4">Meus Orçamentos</h4>
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Categoria</th>
+                    <th>Limite</th>
+                    <th>Gasto Atual</th>
+                    <th>Progresso</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var orcamento in Model)
+                {
+                    var progresso = (orcamento.GastoAtual / orcamento.LimiteMensal) * 100;
+                    var progressoClass = progresso >= 100 ? "bg-danger" : progresso >= 80 ? "bg-warning" : "bg-success";
+
+                    <tr>
+                        <td>@orcamento.Categoria</td>
+                        <td>@orcamento.LimiteMensal.ToString("C")</td>
+                        <td>@orcamento.GastoAtual.ToString("C")</td>
+                        <td>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar @progressoClass"
+                                     role="progressbar"
+                                     style="width: @(Math.Min(progresso, 100))%"
+                                     aria-valuenow="@progresso"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                    @Math.Round(progresso)%
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <form asp-action="EliminarOrcamento" method="post" onsubmit="return confirm('Tem certeza?');">
+                                <input type="hidden" name="id" value="@orcamento.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
