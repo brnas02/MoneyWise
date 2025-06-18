@@ -31,6 +31,8 @@ namespace DWebProjetoFinal.Models
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
+        public string Role { get; set; } = "User";
+
         public IFormFile ProfileImage { get; set; }
     }
 }

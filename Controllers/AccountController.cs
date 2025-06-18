@@ -57,6 +57,7 @@ namespace DWebProjetoFinal.Controllers
                     LastName = model.LastName,
                     Password = model.Password,
                     UserName = model.UserName,
+                    Role = "User",
                     ProfileImagePath = uniqueFileName != null ? "/uploads/" + uniqueFileName : null
                 };
 
@@ -93,12 +94,18 @@ namespace DWebProjetoFinal.Controllers
                 var user = _context.UserAccounts.FirstOrDefault(x => (x.UserName == model.UserNameOrEmail || x.Email == model.UserNameOrEmail) && x.Password == model.Password);
                 if (user != null)
                 {
+                    if (!user.IsActive)
+                    {
+                        ModelState.AddModelError("", "Conta desativada. Contacte o administrador.");
+                        return View();
+                    }
+
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.UserName),
                         new Claim("Name", user.FirstName),
-                        new Claim(ClaimTypes.Role, "User"),
+                        new Claim(ClaimTypes.Role, user.Role),
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -168,6 +175,68 @@ namespace DWebProjetoFinal.Controllers
 
             Console.WriteLine("ModelState inválido");
             return View(updatedUser);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminDashboard()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminUserList()
+        {
+            var users = _context.UserAccounts.ToList();
+            return View(users);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult ToggleUserStatus(int id)
+        {
+            var user = _context.UserAccounts.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+                return NotFound();
+
+            user.IsActive = !user.IsActive;
+            _context.SaveChanges();
+
+            return RedirectToAction("AdminUserList");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult EditUser(int id)
+        {
+            var user = _context.UserAccounts.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View("EditUser", user); // Vai usar uma view chamada EditUser.cshtml
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditUser(UserAccount updatedUser)
+        {
+            var user = _context.UserAccounts.FirstOrDefault(u => u.Id == updatedUser.Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Atualiza os campos permitidos
+            user.FirstName = updatedUser.FirstName;
+            user.LastName = updatedUser.LastName;
+            user.Email = updatedUser.Email;
+            user.UserName = updatedUser.UserName;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("AdminUserList");
         }
     }
 }

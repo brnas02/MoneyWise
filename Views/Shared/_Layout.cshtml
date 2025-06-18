@@ -231,6 +231,13 @@
                                     <li><a class="dropdown-item" asp-controller="Relatorios" asp-action="Anual">Anual</a></li>
                                 </ul>
                             </li>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="btn btn-light mx-2" asp-controller="Account" asp-action="AdminUserList">Utilizadores</a>
+                                </li>
+                            }
                         </ul>
                     }
 

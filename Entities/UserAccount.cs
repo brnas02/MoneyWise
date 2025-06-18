@@ -30,7 +30,13 @@ namespace DWebProjetoFinal.Entities {
         [MaxLength(20, ErrorMessage = "Max 20 characters allowed.")]
         public string Password { get; set; }
 
+        [Required]
+        [MaxLength(20)]
+        public string Role { get; set; } = "User";
+
         [MaxLength(255, ErrorMessage = "Max 255 characters allowed.")]
         public string? ProfileImagePath { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 }
