@@ -16,17 +16,12 @@ namespace DWebProjetoFinal.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configuração existente para UserAccount
-            modelBuilder.Entity<UserAccount>()
-                .Property(u => u.Type)
-                .IsRequired();
-
-            // Configurações para Orcamento (novo)
+            // Configurações para Orcamento
             modelBuilder.Entity<Orcamento>()
                 .HasIndex(o => new { o.UserId, o.Categoria, o.Mes, o.Ano })
                 .IsUnique(); // Evita duplicatas por usuário/categoria/mês
 
-            // Configuração opcional para Meta (novo)
+            // Configuração opcional para Meta
             modelBuilder.Entity<Meta>()
                 .Property(m => m.ValorAtual)
                 .HasDefaultValue(0); // Valor inicial padrão

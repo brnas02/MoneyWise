@@ -31,9 +31,6 @@ namespace DWebProjetoFinal.Models
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage = "Please select a role.")]
-        public int Type { get; set; }
-
         public IFormFile ProfileImage { get; set; }
     }
 }
