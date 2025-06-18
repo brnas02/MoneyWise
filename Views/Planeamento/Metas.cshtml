@@ -1,6 +1,73 @@
-﻿@{
-    ViewData["Title"] = "Metas";
-}
+﻿@model List<DWebProjetoFinal.Entities.Meta>
 
-<h1>Metas</h1>
-<p>Página de planeamento de metas.</p>
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        <h4 class="mb-4">Adicionar Meta</h4>
+        <form asp-action="CriarMeta" method="post" class="row g-3 align-items-end">
+            <!-- Nome da Meta -->
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Nome da Meta</label>
+                <input name="Nome" class="form-control border-0 border-bottom rounded-0" required
+                       placeholder="Inserir" style="background: #f8f9fa;" />
+            </div>
+
+            <!-- Valor Alvo -->
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Valor Alvo (€)</label>
+                <input name="ValorAlvo" type="number" step="0.01"
+                       class="form-control border-0 border-bottom rounded-0" required
+                       placeholder="Inserir" style="background: #f8f9fa;" />
+            </div>
+
+            <!-- Data Limite (Agora com input type="date") -->
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Data Limite</label>
+                <input name="DataLimite" type="date"
+                       class="form-control border-0 border-bottom rounded-0" required
+                       style="background: #f8f9fa;" />
+            </div>
+
+            <!-- Botão Salvar -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                    SALVAR
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabela de Metas (Mantido Igual) -->
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h4 class="mb-4">Minhas Metas</h4>
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Meta</th>
+                    <th>Valor Alvo</th>
+                    <th>Data Limite</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var meta in Model)
+                {
+                    <tr>
+                        <td>@meta.Nome</td>
+                        <td>@meta.ValorAlvo.ToString("C")</td>
+                        <td>@meta.DataLimite.ToShortDateString()</td>
+                        <td>
+                            <form asp-action="EliminarMeta" method="post" onsubmit="return confirm('Tem certeza?');">
+                                <input type="hidden" name="id" value="@meta.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

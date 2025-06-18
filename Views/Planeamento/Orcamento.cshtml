@@ -1,6 +1,46 @@
-﻿@{
-    ViewData["Title"] = "Orçamento";
-}
+﻿@model List<DWebProjetoFinal.Entities.Orcamento>
 
-<h1>Orçamento</h1>
-<p>Página de planeamento de orçamento.</p>
+<h2>Orçamento Mensal</h2>
+
+<form asp-action="CriarOrcamento" method="post">
+    <div class="form-group">
+        <label>Categoria</label>
+        <input name="Categoria" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Limite Mensal (€)</label>
+        <input name="LimiteMensal" type="number" step="0.01" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Categoria</th>
+            <th>Limite</th>
+            <th>Gasto Atual</th>
+            <!-- NOVA COLUNA PARA AÇÕES -->
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orcamento in Model)
+        {
+            <tr>
+                <td>@orcamento.Categoria</td>
+                <td>@orcamento.LimiteMensal.ToString("C")</td>
+                <td>@orcamento.GastoAtual.ToString("C")</td>
+                <!-- NOVO BOTÃO DE ELIMINAR -->
+                <td>
+                    <form asp-action="EliminarOrcamento" method="post" onsubmit="return confirm('Tem certeza?');">
+                        <input type="hidden" name="id" value="@orcamento.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
