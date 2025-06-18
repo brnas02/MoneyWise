@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- Formulário (Mesma estrutura das Metas) -->
+<!-- Formulário -->
 <div class="card mb-4 border-0 shadow-sm">
     <div class="card-body">
         <h4 class="mb-4">Nova Transação</h4>
@@ -43,11 +43,10 @@
 
             <!-- Valor -->
             <div class="col-md-3">
-                <label asp-for="Valor" class="form-label fw-bold">Valor</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-transparent border-0 border-bottom rounded-0">€</span>
-                    <input asp-for="Valor" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" />
-                </div>
+                <label asp-for="Valor" class="form-label fw-bold">Valor (€)</label>
+                <input asp-for="Valor" type="number" step="0.01"
+                       class="form-control border-0 border-bottom rounded-0"
+                       style="background: #f8f9fa;" placeholder="Inserir" />
                 <span asp-validation-for="Valor" class="text-danger small"></span>
             </div>
 
@@ -82,7 +81,7 @@
     }
 }
 
-<!-- CSS Adicional (Igual ao das Metas) -->
+<!-- CSS Adicional -->
 <style>
     .form-control:focus, .form-select:focus {
         box-shadow: none;

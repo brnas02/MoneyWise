@@ -1,39 +1,44 @@
 ﻿@model IEnumerable<DWebProjetoFinal.Entities.Transacao>
-
 @{
     ViewData["Title"] = "Histórico de Transações";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Histórico de Transações</h2>
-
-<table class="table table-striped mt-4">
-    <thead>
-        <tr>
-            <th>Data</th>
-            <th>Tipo</th>
-            <th>Categoria</th>
-            <th>Valor</th>
-            <th>Descrição</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var transacao in Model)
-        {
-            <tr>
-                <td>@transacao.Data.ToString("dd/MM/yyyy")</td>
-                <td>@transacao.TipoTransacao</td>
-                <td>@transacao.Categoria</td>
-                <td>@($"{transacao.Valor:N2} €")</td>
-                <td>@transacao.Descricao</td>
-                <td>
-                    <form asp-action="Eliminar" method="post" onsubmit="return confirm('Tem a certeza que quer eliminar esta transação?');">
-                        <input type="hidden" name="id" value="@transacao.Id" />
-                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<!-- Tabela de Transações -->
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h4 class="mb-4">Histórico de Transações</h4>
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Categoria</th>
+                    <th>Valor</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transacao in Model)
+                {
+                    <tr>
+                        <td>@transacao.Data.ToString("dd/MM/yyyy")</td>
+                        <td>@transacao.TipoTransacao</td>
+                        <td>@transacao.Categoria</td>
+                        <td>@transacao.Valor.ToString("N2") €</td>
+                        <td>@transacao.Descricao</td>
+                        <td>
+                            <form asp-action="Eliminar" method="post" onsubmit="return confirm('Tem a certeza que quer eliminar esta transação?');">
+                                <input type="hidden" name="id" value="@transacao.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
