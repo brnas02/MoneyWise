@@ -2,37 +2,112 @@
 
 @{
     ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
-<h1>Login</h1>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - MoneyWise</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        body {
+            background-color: #ffffff;
+            background-image: url('/logo.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 800px;
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-logo {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .login-title {
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            background-color: #000;
+            color: #fff;
+            border: none;
+        }
+
+            .btn-login:hover {
+                background-color: #333;
+            }
+
+        .register-link {
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+            .register-link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+                .register-link a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="~/logo.png" alt="MoneyWise Logo" class="login-logo" />
+        <div class="login-title">MoneyWise</div>
+
+        <form asp-action="Login" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserNameOrEmail" class="control-label"></label>
-                <input asp-for="UserNameOrEmail" class="form-control" />
-                <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
+
+            <input asp-for="UserNameOrEmail" class="form-control" placeholder="E-mail ou Nome de Utilizador" />
+            <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+
+            <input asp-for="Password" class="form-control" placeholder="Palavra-Passe" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+
+            <button type="submit" class="btn-login">Entrar</button>
         </form>
+
+        <div class="register-link">
+            Não tem conta? <a asp-action="Registration">Clique aqui</a> para criar
+        </div>
     </div>
-</div>
 
-<div>
-    Don't have an account? <a asp-action="Registration">Go to Registration</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>
