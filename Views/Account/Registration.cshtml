@@ -1,78 +1,136 @@
 ﻿@model DWebProjetoFinal.Models.RegistrationViewModel
 
 @{
-    ViewData["Title"] = "Registration";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Registo";
+    Layout = null;
 }
 
-<h1>Registration</h1>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registo - MoneyWise</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #ffffff;
+            background-image: url('/logo.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 800px;
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
+        .register-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 460px;
+            text-align: center;
+        }
+
+        .register-logo {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .register-title {
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            background-color: #000;
+            color: #fff;
+            border: none;
+        }
+
+            .btn-register:hover {
+                background-color: #333;
+            }
+
+        .login-link {
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+            .login-link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+                .login-link a:hover {
+                    text-decoration: underline;
+                }
+
+        .text-danger {
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <img src="~/logo.png" alt="MoneyWise Logo" class="register-logo" />
+        <div class="register-title">Criar Conta</div>
+
         <form asp-action="Registration" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             @if (ViewBag.Message != null)
             {
-                <div class="form-group" style="color: white;">@ViewBag.Message</div>
+                <div style="color: green;">@ViewBag.Message</div>
             }
 
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
+            <input asp-for="FirstName" class="form-control" placeholder="Primeiro Nome" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
 
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
+            <input asp-for="LastName" class="form-control" placeholder="Último Nome" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
 
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
+            <input asp-for="UserName" class="form-control" placeholder="Nome de Utilizador" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
 
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
+            <input asp-for="Email" class="form-control" placeholder="E-mail" />
+            <span asp-validation-for="Email" class="text-danger"></span>
 
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+            <input asp-for="Password" type="password" class="form-control" placeholder="Palavra-Passe" />
+            <span asp-validation-for="Password" class="text-danger"></span>
 
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
+            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirmar Palavra-Passe" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 
-            <div class="form-group">
-                <label asp-for="ProfileImage" class="control-label">Foto de Perfil</label>
-                <input asp-for="ProfileImage" type="file" class="form-control" />
-                <span asp-validation-for="ProfileImage" class="text-danger"></span>
-            </div>
+            <input asp-for="ProfileImage" type="file" class="form-control" />
+            <span asp-validation-for="ProfileImage" class="text-danger"></span>
 
-            <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" />
-            </div>
+            <button type="submit" class="btn-register">Registar</button>
         </form>
+
+        <div class="login-link">
+            Já tem conta? <a asp-action="Login">Clique aqui</a> para entrar
+        </div>
     </div>
-</div>
 
-<div>
-    Already have an account? <a asp-action="Login">Go to Login</a>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
     }
-}
+</body>
+</html>

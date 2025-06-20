@@ -138,19 +138,27 @@
             }
 
             const ctxLinha = document.getElementById('linhaChart')?.getContext('2d');
-            const linhaChart = new Chart(ctxLinha, {
-                type: 'line',
-                data: {
-                    labels: dadosDiarios.map(d => d.Dia),
-                    datasets: [{
-                        label: 'Evolução Mensal',
-                        data: dadosDiarios.map(d => d.Saldo),
-                        borderColor: 'black',
-                        fill: false,
-                        tension: 0.3
-                    }]
-                }
-            });
+                const linhaChart = new Chart(ctxLinha, {
+                    type: 'line',
+                    data: {
+                        labels: dadosDiarios.map(d => d.Dia),
+                        datasets: [{
+                            label: 'Evolução Mensal',
+                            data: dadosDiarios.map(d => d.Saldo),
+                            borderColor: 'black',
+                            fill: false,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+
 
             const ctxDonut = document.getElementById('donutChart')?.getContext('2d');
             const donutChart = new Chart(ctxDonut, {
@@ -179,9 +187,9 @@
 <style>
     .dashboard-cards {
         display: flex;
-        gap: 20px;
+        gap: 10px;
         margin-bottom: 30px;
-        justify-content: space-between;
+        justify-content: center;
     }
 
     .card {
@@ -189,7 +197,7 @@
         padding: 20px;
         background-color: #fff;
         border-radius: 12px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
         font-size: 0.95em;
         display: flex;
         flex-direction: column;

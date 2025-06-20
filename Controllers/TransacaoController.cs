@@ -1,4 +1,5 @@
 ﻿using DWebProjetoFinal.Entities;
+using DWebProjetoFinal.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -16,45 +17,43 @@ namespace DWebProjetoFinal.Controllers
         }
 
         [HttpGet]
-        public IActionResult NovaTransacao()
+        public IActionResult Transacoes()
         {
-            return View();
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var viewModel = new TransacaoViewModel
+            {
+                NovaTransacao = new Transacao { Data = DateTime.Now },
+                Historico = _context.Transacoes
+                    .Where(t => t.UserId == userId)
+                    .OrderByDescending(t => t.Data)
+                    .ToList()
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult NovaTransacao(Transacao model)
+        public IActionResult Criar(TransacaoViewModel model)
         {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
             if (!ModelState.IsValid)
-                return View(model);
+            {
+                model.Historico = _context.Transacoes
+                    .Where(t => t.UserId == userId)
+                    .OrderByDescending(t => t.Data)
+                    .ToList();
 
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                return View("Transacoes", model);
+            }
 
-            if (string.IsNullOrEmpty(userIdClaim))
-                return Unauthorized();
-
-            model.UserId = int.Parse(userIdClaim);
-            _context.Transacoes.Add(model);
+            model.NovaTransacao.UserId = userId;
+            _context.Transacoes.Add(model.NovaTransacao);
             _context.SaveChanges();
 
-            return RedirectToAction("Historico");
-        }
-
-        [HttpGet]
-        public IActionResult Historico()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(userIdClaim))
-                return Unauthorized();
-
-            int userId = int.Parse(userIdClaim);
-            var transacoes = _context.Transacoes
-                .Where(t => t.UserId == userId)
-                .OrderByDescending(t => t.Data)
-                .ToList();
-
-            return View(transacoes);
+            return RedirectToAction("Transacoes");
         }
 
         [HttpPost]
@@ -64,16 +63,13 @@ namespace DWebProjetoFinal.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var transacao = _context.Transacoes.FirstOrDefault(t => t.Id == id && t.UserId == userId);
-            if (transacao == null)
+            if (transacao != null)
             {
-                return NotFound();
+                _context.Transacoes.Remove(transacao);
+                _context.SaveChanges();
             }
 
-            _context.Transacoes.Remove(transacao);
-            _context.SaveChanges();
-
-            return RedirectToAction("Historico");
+            return RedirectToAction("Transacoes");
         }
-
     }
 }

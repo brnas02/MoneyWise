@@ -1,0 +1,100 @@
+﻿@model DWebProjetoFinal.Models.TransacaoViewModel
+@{
+    ViewData["Title"] = "Transações";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Formulário -->
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        <h4 class="mb-4">Nova Transação</h4>
+        <form asp-action="Criar" method="post" class="row g-3 align-items-end">
+            @Html.AntiForgeryToken()
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger col-12">
+                    <ul class="mb-0">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="col-md-3">
+                <label asp-for="NovaTransacao.TipoTransacao" class="form-label fw-bold">Tipo</label>
+                <select asp-for="NovaTransacao.TipoTransacao" class="form-select border-0 border-bottom rounded-0" style="background: #f8f9fa;">
+                    <option value="Receita">Receita</option>
+                    <option value="Despesa">Despesa</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="NovaTransacao.Categoria" class="form-label fw-bold">Categoria</label>
+                <input asp-for="NovaTransacao.Categoria" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="NovaTransacao.Valor" class="form-label fw-bold">Valor (€)</label>
+                <input name="NovaTransacao.Valor" type="number" step="0.01"
+                       class="form-control border-0 border-bottom rounded-0"
+                       style="background: #f8f9fa;" placeholder="Inserir" value="" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="NovaTransacao.Data" class="form-label fw-bold">Data</label>
+                <input asp-for="NovaTransacao.Data" type="date" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="NovaTransacao.Descricao" class="form-label fw-bold">Descrição (Opcional)</label>
+                <input asp-for="NovaTransacao.Descricao" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+            </div>
+
+            <div class="col-md-3 offset-md-9">
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">SALVAR</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Histórico -->
+<div class="card border-0 shadow-sm mb-5">
+    <div class="card-body">
+        <h4 class="mb-4">Histórico de Transações</h4>
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Categoria</th>
+                    <th>Valor</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transacao in Model.Historico)
+                {
+                    <tr>
+                        <td>@transacao.Data.ToString("dd/MM/yyyy")</td>
+                        <td>@transacao.TipoTransacao</td>
+                        <td>@transacao.Categoria</td>
+                        <td>@transacao.Valor.ToString("N2") €</td>
+                        <td>@transacao.Descricao</td>
+                        <td>
+                            <form asp-action="Eliminar" method="post" onsubmit="return confirm('Tem a certeza que quer eliminar esta transação?');">
+                                <input type="hidden" name="id" value="@transacao.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
