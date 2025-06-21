@@ -118,6 +118,13 @@
             <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirmar Palavra-Passe" />
             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 
+            <select asp-for="Role" class="form-control">
+                <option value="">-- Selecione o tipo de conta --</option>
+                <option value="Pessoal">Pessoal</option>
+                <option value="Empresarial">Empresarial</option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+
             <input asp-for="ProfileImage" type="file" class="form-control" />
             <span asp-validation-for="ProfileImage" class="text-danger"></span>
 

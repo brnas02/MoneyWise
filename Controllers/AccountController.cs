@@ -57,7 +57,7 @@ namespace DWebProjetoFinal.Controllers
                     LastName = model.LastName,
                     Password = model.Password,
                     UserName = model.UserName,
-                    Role = "User",
+                    Role = model.Role,
                     ProfileImagePath = uniqueFileName != null ? "/uploads/" + uniqueFileName : null
                 };
 
