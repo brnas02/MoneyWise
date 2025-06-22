@@ -1,35 +1,39 @@
 ﻿@model List<DWebProjetoFinal.Entities.UserAccount>
-@{
+
+    @{
+    // Título da página e definição do layout padrão
     ViewData["Title"] = "Utilizadores Registados";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+    }
 
-<div class="card p-4">
-    <h4 class="mb-4">Utilizadores Registados</h4>
+    <!-- Cartão visual contendo a tabela -->
+    <div class="card p-4">
+        <h4 class="mb-4">Utilizadores Registados</h4>
 
-    <table class="table table-hover align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>Foto</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Username</th>
-                <th>Estado</th>
-                <th style="text-align: right;">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Foto</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Estado</th>
+                    <th style="text-align: right;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
             {
                 <tr>
                     <td>
+                        @* Mostra imagem de perfil, ou placeholder se não houver *@
                         @if (!string.IsNullOrEmpty(user.ProfileImagePath))
                         {
-                            <img src="@user.ProfileImagePath" width="45" height="45" style="border-radius: 50%; object-fit: cover;" />
+                        <img src="@user.ProfileImagePath" width="45" height="45" style="border-radius: 50%; object-fit: cover;" />
                         }
                         else
                         {
-                            <div class="placeholder-img"></div>
+                        <div class="placeholder-img"></div>
                         }
                     </td>
                     <td>@user.FirstName @user.LastName</td>
@@ -42,14 +46,17 @@
                     </td>
                     <td style="text-align: right;">
                         <div class="d-flex justify-content-end gap-2">
+                            <!-- Botão de edição -->
                             <a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-outline-dark btn-sm">Editar</a>
 
+                            <!-- Botão de ativar/desativar -->
                             <form asp-action="ToggleUserStatus" asp-route-id="@user.Id" method="post" style="display:inline;">
                                 <button type="submit" class="btn btn-outline-dark btn-sm">
                                     @(user.IsActive ? "Desativar" : "Ativar")
                                 </button>
                             </form>
 
+                            <!-- Botão de eliminação com confirmação -->
                             <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post" onsubmit="return confirm('Tem a certeza que deseja eliminar este utilizador?');" style="display:inline;">
                                 <button type="submit" class="btn btn-outline-danger btn-sm delete-btn">
                                     <i class="fas fa-trash-alt"></i>
@@ -59,57 +66,64 @@
                     </td>
                 </tr>
             }
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 
-<style>
-    .placeholder-img {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background-color: #ccc;
-        display: inline-block;
-    }
+    <style>
+        /* Estilo para a imagem de utilizador quando não há foto carregada */
+        .placeholder-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #ccc;
+            display: inline-block;
+        }
 
-    .table th, .table td {
-        vertical-align: middle;
-        padding: 12px 16px;
-    }
+        /* Espaçamento e alinhamento da tabela */
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 12px 16px;
+        }
 
-    .btn-outline-dark {
-        border-radius: 10px;
-        padding: 4px 14px;
-        font-weight: 500;
-    }
+        /* Estilo geral dos botões */
+        .btn-outline-dark {
+            border-radius: 10px;
+            padding: 4px 14px;
+            font-weight: 500;
+        }
 
-    .badge {
-        font-size: 0.9em;
-        padding: 6px 10px;
-        border-radius: 10px;
-    }
+        /* Estilo dos badges "Ativo"/"Inativo" */
+        .badge {
+            font-size: 0.9em;
+            padding: 6px 10px;
+            border-radius: 10px;
+        }
 
-    .card {
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        border: 1px solid #eee;
-        background-color: #fff;
-    }
+        /* Estilo do cartão da página */
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #eee;
+            background-color: #fff;
+        }
 
-    .btn-outline-danger {
-        border-radius: 10px;
-        padding: 4px 12px;
-        font-weight: 500;
-    }
+        /* Botão de eliminar */
+        .btn-outline-danger {
+            border-radius: 10px;
+            padding: 4px 12px;
+            font-weight: 500;
+        }
 
-    .delete-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 4px 14px;
-        border-radius: 10px;
-        font-size: 0.9em;
-        font-weight: 500;
-        height: 34px;
-    }
-</style>
+        /* Ajustes finos no botão de eliminar com ícone */
+        .delete-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 14px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 500;
+            height: 34px;
+        }
+    </style>

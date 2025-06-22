@@ -1,20 +1,22 @@
 ﻿@{
-    ViewData["Title"] = "Dashboard";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dashboard"; // Título da página
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Usa o layout principal
 
+    // Define o mês e ano selecionado, com fallback para o mês e ano atual
     var mesSelecionado = ViewBag.Mes != null ? (int)ViewBag.Mes : DateTime.Now.Month;
     var anoSelecionado = ViewBag.Ano != null ? (int)ViewBag.Ano : DateTime.Now.Year;
 }
 
+<!-- Formulário para filtrar por mês e ano -->
 <form method="get" asp-action="Dashboard" class="row g-3 mb-4">
     <div class="col-md-2">
         <label class="form-label fw-bold">Mês</label>
         <select name="mes" class="form-select">
             @for (int i = 1; i <= 12; i++)
             {
-                <option value="@i" selected="@(i == mesSelecionado)">
-                    @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
-                </option>
+            <option value="@i" selected="@(i == mesSelecionado)">
+                @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
+            </option>
             }
         </select>
     </div>
@@ -23,7 +25,7 @@
         <select name="ano" class="form-select">
             @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 5; y++)
             {
-                <option value="@y" selected="@(y == anoSelecionado)">@y</option>
+            <option value="@y" selected="@(y == anoSelecionado)">@y</option>
             }
         </select>
     </div>
@@ -32,12 +34,14 @@
     </div>
 </form>
 
+<!-- Mostra os totais mensais: receita, despesa e saldo -->
 <div class="dashboard-row">
     <div class="box">Receita Mensal<br /><strong>@ViewBag.Receita.ToString("C")</strong></div>
     <div class="box">Despesa Mensal<br /><strong>@ViewBag.Despesa.ToString("C")</strong></div>
     <div class="box">Saldo Atual<br /><strong>@ViewBag.Saldo.ToString("C")</strong></div>
 </div>
 
+<!-- Gráfico de evolução diária e tabela de categorias de despesa -->
 <div class="dashboard-row">
     <div class="box box-situacao">
         <h4>Situação Mensal</h4>
@@ -48,25 +52,19 @@
         <h4>Categorias de Despesas</h4>
         <table>
             <thead>
-                <tr>
-                    <th>Categoria</th>
-                    <th>Valor</th>
-                </tr>
+                <tr><th>Categoria</th><th>Valor</th></tr>
             </thead>
             <tbody>
                 @if (ViewBag.Categorias != null && ViewBag.Categorias.Count > 0)
                 {
                     foreach (var cat in ViewBag.Categorias)
                     {
-                        <tr>
-                            <td>@cat.Categoria</td>
-                            <td>@String.Format("{0:C}", cat.Total)</td>
-                        </tr>
+                <tr><td>@cat.Categoria</td><td>@String.Format("{0:C}", cat.Total)</td></tr>
                     }
                 }
                 else
                 {
-                    <tr><td colspan="2">Sem dados</td></tr>
+                <tr><td colspan="2">Sem dados</td></tr>
                 }
             </tbody>
         </table>
@@ -74,18 +72,22 @@
 </div>
 
 @{
+    // Dados para cálculo da percentagem da meta atingida
     var metas = ViewBag.Metas as List<DWebProjetoFinal.Entities.Meta> ?? new List<DWebProjetoFinal.Entities.Meta>();
     var totalAlvo = metas.Sum(m => m.ValorAlvo);
     var totalAtual = metas.Sum(m => m.ValorAtual);
     var percentagem = totalAlvo > 0 ? (totalAtual / totalAlvo * 100) : 0;
 }
 
+<!-- Gráfico em donut + progresso das metas + orçamento mensal -->
 <div class="dashboard-row" style="align-items: flex-start;">
     <div class="box box-grafico" style="display: flex; gap: 40px; align-items: center;">
         <div style="flex: 1;">
             <h4>Despesas Mensais Repartidas</h4>
             <canvas id="donutChart"></canvas>
         </div>
+
+        <!-- Legenda do gráfico donut com cores distintas por categoria -->
         <ul class="categoria-legenda" style="margin-top: 0;">
             @{
                 var cores = new[] { "#e0e0e0", "#c2c2c2", "#a6a6a6", "#8c8c8c", "#666666", "#4d4d4d", "#333333", "#1a1a1a" };
@@ -97,23 +99,20 @@
                 foreach (var cat in ViewBag.Categorias)
                 {
                     var cor = cores[i % cores.Length];
-                    <li>
-                        <span class="cor-legenda" style="background-color: @cor"></span>
-                        @cat.Categoria
-                    </li>
+            <li><span class="cor-legenda" style="background-color: @cor"></span>@cat.Categoria</li>
                     i++;
                 }
             }
             else
             {
-                <li><span class="cor-legenda" style="background-color: #e0e0e0"></span>Sem dados</li>
+            <li><span class="cor-legenda" style="background-color: #e0e0e0"></span>Sem dados</li>
             }
         </ul>
     </div>
 
+    <!-- Secção de metas com barra de progresso e lista -->
     <div class="box box-metas">
         <h4>Meta de Economia Mensal</h4>
-
         <div class="progress-container">
             <div class="progress-bar" style="width:@percentagem%;"></div>
         </div>
@@ -124,32 +123,23 @@
 
         @if (metas.Count > 0)
         {
-            <table class="tabela-metas">
-                <thead>
-                    <tr>
-                        <th>Meta:</th>
-                        <th>Valor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var meta in metas)
+        <table class="tabela-metas">
+            <thead><tr><th>Meta:</th><th>Valor</th></tr></thead>
+            <tbody>
+                @foreach (var meta in metas)
                     {
-                        <tr>
-                            <td>@meta.Nome</td>
-                            <td>@meta.ValorAlvo.ToString("C")</td>
-                        </tr>
+                <tr><td>@meta.Nome</td><td>@meta.ValorAlvo.ToString("C")</td></tr>
                     }
-                </tbody>
-            </table>
+            </tbody>
+        </table>
         }
         else
         {
-            <div style="margin-top: 20px; color: #777; font-size: 0.95em;">
-                Nenhuma meta ainda definida.
-            </div>
+        <div style="margin-top: 20px; color: #777; font-size: 0.95em;">Nenhuma meta ainda definida.</div>
         }
     </div>
 
+    <!-- Secção com informação do orçamento mensal -->
     <div class="box">
         <h4>Orçamento Mensal</h4>
         <strong>@ViewBag.OrcamentoGasto.ToString("C") / @ViewBag.OrcamentoLimite.ToString("C")</strong>
@@ -159,19 +149,20 @@
     </div>
 </div>
 
+<!-- Scripts de geração de gráficos (linha e donut) com Chart.js -->
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         window.onload = function () {
+            // Dados do gráfico de linha (saldo diário)
             const dadosDiarios = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Diario ?? new List<object>()));
 
+            // Dados do gráfico donut (despesas por categoria)
             let categorias = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Categorias ?? new List<object>()));
             let semDados = categorias.length === 0;
 
             if (semDados) {
-                categorias = [
-                    { Categoria: "Sem dados", Total: 1 }
-                ];
+                categorias = [{ Categoria: "Sem dados", Total: 1 }];
             }
 
             const ctxLinha = document.getElementById('linhaChart')?.getContext('2d');
@@ -189,9 +180,7 @@
                 },
                 options: {
                     plugins: {
-                        legend: {
-                            display: false
-                        }
+                        legend: { display: false }
                     }
                 }
             });
@@ -210,9 +199,7 @@
                 },
                 options: {
                     plugins: {
-                        legend: {
-                            display: false
-                        }
+                        legend: { display: false }
                     }
                 }
             });
@@ -220,6 +207,7 @@
     </script>
 }
 
+<!-- Estilos customizados da dashboard -->
 <style>
     .dashboard-row {
         display: flex;
@@ -238,7 +226,6 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
         flex: 1;
         min-width: 300px;
-        max-width: 100%;
         font-size: 0.95em;
     }
 
@@ -247,31 +234,6 @@
             color: #000;
             margin-top: 10px;
             font-weight: bold;
-        }
-
-    .box-despesas table,
-    .tabela-metas {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
-
-        .box-despesas th,
-        .tabela-metas th {
-            text-align: left;
-            font-weight: 600;
-            font-size: 1em;
-            color: #333;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .box-despesas td,
-        .tabela-metas td {
-            padding: 6px 0;
-            font-size: 0.95em;
-            color: #222;
-            border-bottom: 1px solid #f0f0f0;
         }
 
     .progress-container {
@@ -296,7 +258,6 @@
     }
 
         .categoria-legenda li {
-            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;

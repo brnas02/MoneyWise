@@ -1,24 +1,29 @@
 ﻿@{
-    ViewData["Title"] = "Relatório Anual";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var anoAtual = DateTime.Now.Year;
+    ViewData["Title"] = "Relatório Anual"; // Define o título da página
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Usa o layout principal da aplicação
+    var anoAtual = DateTime.Now.Year; // Obtém o ano atual
 }
 
+<!-- Container principal com margem no topo -->
 <div class="container mt-5">
+    <!-- Cartão centralizado com sombra e preenchimento -->
     <div class="card shadow-sm border-0 p-5 text-center">
+        <!-- Título do cartão -->
         <h2 class="mb-4 fw-bold">Gerar Relatório Anual</h2>
 
+        <!-- Seletor de ano -->
         <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
-
-            <!-- Dropdown Ano -->
+            <!-- Dropdown com os anos (do atual até 5 anos à frente) -->
             <select class="form-select form-select-lg w-auto border-dark">
                 @for (int a = anoAtual; a <= anoAtual + 5; a++)
                 {
-                    <option value="@a">@a</option>
+                <option value="@a">@a</option>
+  <!-- Opções de anos geradas dinamicamente -->
                 }
             </select>
         </div>
 
+        <!-- Botão para acionar a geração do relatório -->
         <div class="d-flex justify-content-center mt-4">
             <button class="btn btn-dark btn-lg px-5">Gerar Relatório</button>
         </div>

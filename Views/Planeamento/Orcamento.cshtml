@@ -1,94 +1,107 @@
 ﻿@model List<DWebProjetoFinal.Entities.Orcamento>
+    <!-- A view utiliza uma lista de objetos Orcamento -->
+    <!-- Cartão para Adicionar um novo Orçamento -->
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body">
+            <h4 class="mb-4">Adicionar Orçamento</h4>
 
-<div class="card mb-4 border-0 shadow-sm">
-    <div class="card-body">
-        <h4 class="mb-4">Adicionar Orçamento</h4>
-        <form asp-action="CriarOrcamento" method="post" class="row g-3 align-items-end">
-            <!-- Categoria -->
-            <div class="col-md-4">
-                <label class="form-label fw-bold">Categoria</label>
-                <input name="Categoria" class="form-control border-0 border-bottom rounded-0" required
-                       placeholder="Inserir" style="background: #f8f9fa;" />
-            </div>
+            <!-- Formulário POST para criar novo orçamento -->
+            <form asp-action="CriarOrcamento" method="post" class="row g-3 align-items-end">
+                <!-- Campo: Categoria -->
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Categoria</label>
+                    <input name="Categoria" class="form-control border-0 border-bottom rounded-0" required
+                           placeholder="Inserir" style="background: #f8f9fa;" />
+                </div>
 
-            <!-- Limite Mensal -->
-            <div class="col-md-3">
-                <label class="form-label fw-bold">Limite Mensal (€)</label>
-                <input name="LimiteMensal" type="text"
-                       class="form-control border-0 border-bottom rounded-0" required
-                       placeholder="Inserir" style="background: #f8f9fa;" />
-            </div>
+                <!-- Campo: Limite Mensal -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Limite Mensal (€)</label>
+                    <input name="LimiteMensal" type="text"
+                           class="form-control border-0 border-bottom rounded-0" required
+                           placeholder="Inserir" style="background: #f8f9fa;" />
+                </div>
 
-            <!-- Espaço reservado para futuros campos -->
-            <div class="col-md-3">
-                <!-- Pode ser usado para adicionar outro campo no futuro -->
-            </div>
+                <!-- Espaço reservado para futuros campos (ex. descrição, nota, etc.) -->
+                <div class="col-md-3">
+                    <!-- Vazio intencionalmente -->
+                </div>
 
-            <!-- Botão Salvar -->
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
-                    SALVAR
-                </button>
-            </div>
-        </form>
+                <!-- Botão para guardar -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                        SALVAR
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-@{
+    @{
+    // Determina mês e ano selecionados ou usa o atual como padrão
     var mesSelecionado = ViewBag.Mes != null ? (int)ViewBag.Mes : DateTime.Now.Month;
     var anoSelecionado = ViewBag.Ano != null ? (int)ViewBag.Ano : DateTime.Now.Year;
-}
+    }
 
-<form method="get" asp-action="Orcamento" class="row g-3 mb-4">
-    <div class="col-md-3">
-        <label class="form-label fw-bold">Mês</label>
-        <select name="mes" class="form-select">
-            @for (int i = 1; i <= 12; i++)
+    <!-- Formulário GET para filtrar orçamentos por mês e ano -->
+    <form method="get" asp-action="Orcamento" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label class="form-label fw-bold">Mês</label>
+            <select name="mes" class="form-select">
+                @for (int i = 1; i <= 12; i++)
             {
                 <option value="@i" selected="@(i == mesSelecionado)">
                     @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
                 </option>
             }
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label class="form-label fw-bold">Ano</label>
-        <select name="ano" class="form-select">
-            @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 5; y++)
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-bold">Ano</label>
+            <select name="ano" class="form-select">
+                @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 5; y++)
             {
                 <option value="@y" selected="@(y == anoSelecionado)">@y</option>
             }
-        </select>
-    </div>
-    <div class="col-md-3 align-self-end">
-        <button type="submit" class="btn btn-secondary">Filtrar</button>
-    </div>
-</form>
+            </select>
+        </div>
+        <div class="col-md-3 align-self-end">
+            <button type="submit" class="btn btn-secondary">Filtrar</button>
+        </div>
+    </form>
 
-<!-- Tabela de Orçamentos -->
-<div class="card border-0 shadow-sm">
-    <div class="card-body">
-        <h4 class="mb-4">Meus Orçamentos</h4>
-        <table class="table">
-            <thead class="table-light">
-                <tr>
-                    <th>Categoria</th>
-                    <th>Limite</th>
-                    <th>Gasto Atual</th>
-                    <th>Progresso</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var orcamento in Model)
+    <!-- Cartão com Tabela de Orçamentos -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <h4 class="mb-4">Meus Orçamentos</h4>
+
+            <!-- Tabela que lista todos os orçamentos disponíveis -->
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Categoria</th>
+                        <th>Limite</th>
+                        <th>Gasto Atual</th>
+                        <th>Progresso</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var orcamento in Model)
                 {
+                    // Calcula a percentagem de uso do orçamento
                     var progresso = (orcamento.GastoAtual / orcamento.LimiteMensal) * 100;
-                    var progressoClass = progresso >= 100 ? "bg-danger" : progresso >= 80 ? "bg-warning" : "bg-success";
+
+                    // Define a cor da barra de progresso conforme o uso
+                    var progressoClass = progresso >= 100 ? "bg-danger" :
+                                         progresso >= 80 ? "bg-warning" :
+                                         "bg-success";
 
                     <tr>
-                        <td>@orcamento.Categoria</td>
-                        <td>@orcamento.LimiteMensal.ToString("C")</td>
-                        <td>@orcamento.GastoAtual.ToString("C")</td>
+                        <td>@orcamento.Categoria</td> <!-- Nome da categoria -->
+                        <td>@orcamento.LimiteMensal.ToString("C")</td> <!-- Limite mensal formatado -->
+                        <td>@orcamento.GastoAtual.ToString("C")</td> <!-- Valor gasto até agora -->
+                        <!-- Barra de progresso visual -->
                         <td>
                             <div class="progress" style="height: 20px;">
                                 <div class="progress-bar @progressoClass"
@@ -97,10 +110,12 @@
                                      aria-valuenow="@progresso"
                                      aria-valuemin="0"
                                      aria-valuemax="100">
-                                    @Math.Round(progresso)%
+                                    @Math.Round(progresso)% <!-- Mostra percentagem arredondada -->
                                 </div>
                             </div>
                         </td>
+
+                        <!-- Botão para eliminar orçamento -->
                         <td>
                             <form asp-action="EliminarOrcamento" method="post" onsubmit="return confirm('Tem certeza?');">
                                 <input type="hidden" name="id" value="@orcamento.Id" />
@@ -111,7 +126,7 @@
                         </td>
                     </tr>
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>

@@ -1,6 +1,7 @@
 ﻿@model DWebProjetoFinal.Models.LoginViewModel
 
 @{
+    // Define o título da página e indica que não será usado um layout comum (_Layout.cshtml)
     ViewData["Title"] = "Login";
     Layout = null;
 }
@@ -11,12 +12,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - MoneyWise</title>
+
+    <!-- Estilos Bootstrap e CSS personalizado -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
     <style>
+        /* Estilização da página de login */
         body {
             background-color: #ffffff;
-            background-image: url('/logo.png');
+            background-image: url('/logo.png'); /* Logo ao centro da tela */
             background-repeat: no-repeat;
             background-position: center center;
             background-size: 800px;
@@ -85,28 +90,37 @@
     </style>
 </head>
 <body>
+    <!-- Container central do formulário -->
     <div class="login-container">
+        <!-- Logo e título -->
         <img src="~/logo.png" alt="MoneyWise Logo" class="login-logo" />
         <div class="login-title">MoneyWise</div>
 
+        <!-- Formulário de login -->
         <form asp-action="Login" method="post">
+            <!-- Exibe mensagens de erro de validação geral -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <!-- Campo: Nome de utilizador ou email -->
             <input asp-for="UserNameOrEmail" class="form-control" placeholder="E-mail ou Nome de Utilizador" />
             <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
 
+            <!-- Campo: Palavra-passe -->
             <input asp-for="Password" class="form-control" placeholder="Palavra-Passe" type="password" />
             <span asp-validation-for="Password" class="text-danger"></span>
 
+            <!-- Botão de envio -->
             <button type="submit" class="btn-login">Entrar</button>
         </form>
 
+        <!-- Link para registar nova conta -->
         <div class="register-link">
             Não tem conta? <a asp-action="Registration">Clique aqui</a> para criar
         </div>
     </div>
 
     @section Scripts {
+        <!-- Validações client-side automáticas com base no modelo -->
         <partial name="_ValidationScriptsPartial" />
     }
 </body>

@@ -1,42 +1,52 @@
 ﻿@model DWebProjetoFinal.Entities.UserAccount
 
 @{
+    // Define o título da página e o layout partilhado a ser utilizado
     ViewData["Title"] = "Editar Perfil";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Editar Perfil</h1>
 
+<!-- Cartão com formatação visual usando Bootstrap -->
 <div class="card p-4 mt-4">
+
+    <!-- Formulário para enviar os dados atualizados do perfil -->
     <form asp-controller="Account" asp-action="Edit" method="post" enctype="application/x-www-form-urlencoded">
-        @Html.AntiForgeryToken()
 
-        <input type="hidden" asp-for="Id" />
+        @Html.AntiForgeryToken() <!-- Proteção contra ataques CSRF -->
 
+        <input type="hidden" asp-for="Id" /> <!-- Campo oculto que mantém o ID do utilizador -->
+        <!-- Campo: Primeiro Nome -->
         <div class="mb-3">
             <label asp-for="FirstName" class="form-label">Primeiro Nome</label>
             <input asp-for="FirstName" class="form-control" />
         </div>
 
+        <!-- Campo: Último Nome -->
         <div class="mb-3">
             <label asp-for="LastName" class="form-label">Último Nome</label>
             <input asp-for="LastName" class="form-control" />
         </div>
 
+        <!-- Campo: Email -->
         <div class="mb-3">
             <label asp-for="Email" class="form-label">Email</label>
             <input asp-for="Email" class="form-control" />
         </div>
 
+        <!-- Campo: Nome de Utilizador -->
         <div class="mb-3">
             <label asp-for="UserName" class="form-label">Nome de Utilizador</label>
             <input asp-for="UserName" class="form-control" />
         </div>
 
+        <!-- Botão de submissão do formulário -->
         <button type="submit" class="btn btn-dark">Guardar Alterações</button>
     </form>
 </div>
 
 @section Scripts {
+    <!-- Inclusão dos scripts de validação de formulários (client-side) -->
     <partial name="_ValidationScriptsPartial" />
 }

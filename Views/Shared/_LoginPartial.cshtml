@@ -1,39 +1,50 @@
-﻿@using Microsoft.EntityFrameworkCore
+﻿@* Importa as funcionalidades de Entity Framework Core *@
+@using Microsoft.EntityFrameworkCore
+
+@* Injeta a instância do contexto de base de dados para aceder a utilizadores *@
 @inject DWebProjetoFinal.Entities.AppDbContext _context
 
+@* Verifica se o utilizador está autenticado *@
 @if (User.Identity.IsAuthenticated)
 {
+@* Obtém o utilizador autenticado da base de dados *@
     var user = await _context.UserAccounts.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
+@* Define imagem padrão caso o utilizador não tenha nenhuma *@
     var userProfileImage = "/logo.png";
 
+@* Se existir uma imagem de perfil, usa-a *@
     if (user != null && !string.IsNullOrEmpty(user.ProfileImagePath))
     {
         userProfileImage = user.ProfileImagePath;
     }
 
-    <div class="navbar-right d-flex align-items-center">
-        <span class="me-2">@user?.FirstName @user?.LastName</span>
+@* Renderiza nome do utilizador, imagem de perfil e botão de logout *@
+<div class="navbar-right d-flex align-items-center">
+    <span class="me-2">@user?.FirstName @user?.LastName</span>
 
-        <a asp-controller="Account" asp-action="Edit" style="margin-right: 10px;">
-            <img src="@userProfileImage" alt="Profile Image" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
-        </a>
+    @* Link para editar perfil *@
+    <a asp-controller="Account" asp-action="Edit" style="margin-right: 10px;">
+        <img src="@userProfileImage" alt="Profile Image" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+    </a>
 
-        <form asp-controller="Account" asp-action="LogOut" method="post" id="logoutForm">
-            <button type="submit" class="btn logout-btn">
-                <i class="fas fa-play fa-flip-horizontal"></i> LOGOUT
-            </button>
-        </form>
-    </div>
+    @* Formulário para fazer logout com botão *@
+    <form asp-controller="Account" asp-action="LogOut" method="post" id="logoutForm">
+        <button type="submit" class="btn logout-btn">
+            <i class="fas fa-play fa-flip-horizontal"></i> LOGOUT
+        </button>
+    </form>
+</div>
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right d-flex align-items-center">
-        <li class="me-2">
-            <a class="btn register-btn" asp-controller="Account" asp-action="Registration">REGISTER</a>
-        </li>
-        <li>
-            <a class="btn login-btn" asp-controller="Account" asp-action="Login"> LOGIN <i class="fas fa-play"></i></a>
-        </li>
-    </ul>
+@* Se o utilizador NÃO estiver autenticado, mostra botões de registo e login *@
+<ul class="nav navbar-nav navbar-right d-flex align-items-center">
+    <li class="me-2">
+        <a class="btn register-btn" asp-controller="Account" asp-action="Registration">REGISTER</a>
+    </li>
+    <li>
+        <a class="btn login-btn" asp-controller="Account" asp-action="Login"> LOGIN <i class="fas fa-play"></i></a>
+    </li>
+</ul>
 }

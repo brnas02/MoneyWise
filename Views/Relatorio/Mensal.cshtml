@@ -1,31 +1,37 @@
 ﻿@{
-    ViewData["Title"] = "Relatório Mensal";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var anoAtual = DateTime.Now.Year;
+    ViewData["Title"] = "Relatório Mensal"; // Define o título da página para exibição no layout
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Define o layout padrão da aplicação
+    var anoAtual = DateTime.Now.Year; // Obtém o ano atual dinamicamente
 }
 
+<!-- Início do conteúdo principal -->
 <div class="container mt-5">
+    <!-- Cartão central com sombra, padding e alinhamento de texto ao centro -->
     <div class="card shadow-sm border-0 p-5 text-center">
+        <!-- Título do cartão -->
         <h2 class="mb-4 fw-bold">Gerar Relatório Mensal</h2>
 
+        <!-- Secção com dropdowns para seleção de mês e ano -->
         <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
-            <!-- Dropdown Mês -->
+            @* Dropdown para seleção do mês *@
             <select class="form-select form-select-lg w-auto border-dark">
                 @for (int m = 1; m <= 12; m++)
                 {
-                    <option value="@m">@m</option>
+                <option value="@m">@m</option>
+                @* Lista de meses de 1 a 12 *@
                 }
             </select>
 
-            <!-- Dropdown Ano -->
+            @* Dropdown para seleção do ano (do ano atual até 5 anos no futuro) *@
             <select class="form-select form-select-lg w-auto border-dark">
                 @for (int a = anoAtual; a <= anoAtual + 5; a++)
                 {
-                    <option value="@a">@a</option>
+                <option value="@a">@a</option>
                 }
             </select>
         </div>
 
+        <!-- Botão para acionar a geração do relatório -->
         <div class="d-flex justify-content-center mt-4">
             <button class="btn btn-dark btn-lg px-5">Gerar Relatório</button>
         </div>

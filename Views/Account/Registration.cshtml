@@ -1,6 +1,7 @@
 ﻿@model DWebProjetoFinal.Models.RegistrationViewModel
 
 @{
+    // Define o título da página e não usa o layout principal
     ViewData["Title"] = "Registo";
     Layout = null;
 }
@@ -11,8 +12,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registo - MoneyWise</title>
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
     <style>
+        /* Estilo da página de fundo com o logo */
         body {
             background-color: #ffffff;
             background-image: url('/logo.png');
@@ -26,6 +31,7 @@
             font-family: 'Segoe UI', sans-serif;
         }
 
+        /* Cartão central de registo */
         .register-container {
             background-color: rgba(255, 255, 255, 0.95);
             padding: 40px;
@@ -88,36 +94,48 @@
     </style>
 </head>
 <body>
+
+    <!-- Conteúdo central da página de registo -->
     <div class="register-container">
         <img src="~/logo.png" alt="MoneyWise Logo" class="register-logo" />
         <div class="register-title">Criar Conta</div>
 
+        <!-- Formulário de registo com suporte a ficheiros (imagem de perfil) -->
         <form asp-action="Registration" method="post" enctype="multipart/form-data">
+            <!-- Erros de validação geral do modelo -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <!-- Mensagem de sucesso após registo -->
             @if (ViewBag.Message != null)
             {
-                <div style="color: green;">@ViewBag.Message</div>
+            <div style="color: green;">@ViewBag.Message</div>
             }
 
+            <!-- Primeiro Nome -->
             <input asp-for="FirstName" class="form-control" placeholder="Primeiro Nome" />
             <span asp-validation-for="FirstName" class="text-danger"></span>
 
+            <!-- Último Nome -->
             <input asp-for="LastName" class="form-control" placeholder="Último Nome" />
             <span asp-validation-for="LastName" class="text-danger"></span>
 
+            <!-- Nome de Utilizador -->
             <input asp-for="UserName" class="form-control" placeholder="Nome de Utilizador" />
             <span asp-validation-for="UserName" class="text-danger"></span>
 
+            <!-- Email -->
             <input asp-for="Email" class="form-control" placeholder="E-mail" />
             <span asp-validation-for="Email" class="text-danger"></span>
 
+            <!-- Palavra-Passe -->
             <input asp-for="Password" type="password" class="form-control" placeholder="Palavra-Passe" />
             <span asp-validation-for="Password" class="text-danger"></span>
 
+            <!-- Confirmar Palavra-Passe -->
             <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirmar Palavra-Passe" />
             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 
+            <!-- Tipo de Conta (select) -->
             <select asp-for="Role" class="form-control">
                 <option value="">-- Selecione o tipo de conta --</option>
                 <option value="Pessoal">Pessoal</option>
@@ -125,18 +143,22 @@
             </select>
             <span asp-validation-for="Role" class="text-danger"></span>
 
+            <!-- Upload de imagem de perfil -->
             <input asp-for="ProfileImage" type="file" class="form-control" />
             <span asp-validation-for="ProfileImage" class="text-danger"></span>
 
+            <!-- Botão de submissão -->
             <button type="submit" class="btn-register">Registar</button>
         </form>
 
+        <!-- Link para quem já tem conta -->
         <div class="login-link">
             Já tem conta? <a asp-action="Login">Clique aqui</a> para entrar
         </div>
     </div>
 
     @section Scripts {
+        <!-- Scripts de validação do lado do cliente (jQuery Unobtrusive) -->
         <partial name="_ValidationScriptsPartial" />
     }
 </body>

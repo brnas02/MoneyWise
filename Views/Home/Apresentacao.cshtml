@@ -1,26 +1,35 @@
 ﻿@{
+    // Define o título da aba e aplica o layout base da aplicação
     ViewData["Title"] = "Bem-vindo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<!-- Secção de boas-vindas com logo e botão para login -->
 <div class="text-center py-5">
-    <img src="~/logolight.png" class="img-fluid" style="max-width: 500px;" alt="Logo MoneyWise">
+    <img src="~/logolight.png" class="img-fluid" style="max-width: 500px;" alt="Logo MoneyWise" />
     <p class="lead">A tua plataforma de gestão financeira pessoal de forma simples, visual e eficiente.</p>
     <a href="/Account/Login" class="btn btn-primary btn-sm mt-3 px-4 py-2 d-inline-block">Começa Agora</a>
 </div>
 
+<!-- Secção com apresentação das principais funcionalidades -->
 <div class="container py-5">
     <div class="row text-center">
+
+        <!-- Funcionalidade: Transações -->
         <div class="col-md-4 mb-4">
             <i class="fas fa-exchange-alt fa-3x text-primary mb-3"></i>
             <h4>Transações</h4>
             <p>Regista as tuas receitas e despesas de forma rápida e acompanha tudo mês a mês.</p>
         </div>
+
+        <!-- Funcionalidade: Metas -->
         <div class="col-md-4 mb-4">
             <i class="fas fa-bullseye fa-3x text-success mb-3"></i>
             <h4>Metas</h4>
             <p>Define objetivos de poupança e acompanha o teu progresso ao longo do tempo.</p>
         </div>
+
+        <!-- Funcionalidade: Orçamentos -->
         <div class="col-md-4 mb-4">
             <i class="fas fa-wallet fa-3x text-warning mb-3"></i>
             <h4>Orçamentos</h4>
@@ -28,11 +37,12 @@
         </div>
     </div>
 
+    <!-- Secção com preview do dashboard -->
     <div class="row text-center mt-5">
         <div class="col-md-6 offset-md-3">
             <h4>Dashboard Visual</h4>
             <p>Analisa o teu saldo, evolução diária, categorias de despesa e metas tudo num só lugar!</p>
-            <img src="~/dashboard.png" alt="Dashboard" class="img-fluid shadow rounded">
+            <img src="~/dashboard.png" alt="Dashboard" class="img-fluid shadow rounded" />
         </div>
     </div>
 </div>

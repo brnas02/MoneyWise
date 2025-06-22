@@ -1,87 +1,99 @@
 ﻿@model List<DWebProjetoFinal.Entities.Meta>
+    <!-- Modelo da view: lista de metas do utilizador -->
+    <!-- Formulário para adicionar uma nova meta -->
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body">
+            <h4 class="mb-4">Adicionar Meta</h4>
 
-<div class="card mb-4 border-0 shadow-sm">
-    <div class="card-body">
-        <h4 class="mb-4">Adicionar Meta</h4>
-        <form asp-action="CriarMeta" method="post" class="row g-3 align-items-end">
-            <div class="col-md-4">
-                <label class="form-label fw-bold">Nome da Meta</label>
-                <input name="Nome" class="form-control border-0 border-bottom rounded-0" required
-                       placeholder="Inserir" style="background: #f8f9fa;" />
-            </div>
+            <!-- Formulário POST para criar uma nova meta -->
+            <form asp-action="CriarMeta" method="post" class="row g-3 align-items-end">
 
-            <div class="col-md-3">
-                <label class="form-label fw-bold">Valor Alvo (€)</label>
-                <input name="ValorAlvo" type="text"
-                       class="form-control border-0 border-bottom rounded-0" required
-                       placeholder="Inserir" style="background: #f8f9fa;" />
-            </div>
+                <!-- Campo: Nome da meta -->
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Nome da Meta</label>
+                    <input name="Nome" class="form-control border-0 border-bottom rounded-0" required
+                           placeholder="Inserir" style="background: #f8f9fa;" />
+                </div>
 
-            <div class="col-md-3">
-                <label class="form-label fw-bold">Data Limite</label>
-                <input name="DataLimite" type="date"
-                       class="form-control border-0 border-bottom rounded-0" required
-                       style="background: #f8f9fa;" />
-            </div>
+                <!-- Campo: Valor alvo da meta -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Valor Alvo (€)</label>
+                    <input name="ValorAlvo" type="text"
+                           class="form-control border-0 border-bottom rounded-0" required
+                           placeholder="Inserir" style="background: #f8f9fa;" />
+                </div>
 
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">SALVAR</button>
-            </div>
-        </form>
+                <!-- Campo: Data limite da meta -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Data Limite</label>
+                    <input name="DataLimite" type="date"
+                           class="form-control border-0 border-bottom rounded-0" required
+                           style="background: #f8f9fa;" />
+                </div>
+
+                <!-- Botão para submeter o formulário -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">SALVAR</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-@{
+    @{
+    // Recupera o mês e ano selecionados, ou usa o mês/ano atual por padrão
     var mesSelecionado = ViewBag.Mes != null ? (int)ViewBag.Mes : DateTime.Now.Month;
     var anoSelecionado = ViewBag.Ano != null ? (int)ViewBag.Ano : DateTime.Now.Year;
-}
+    }
 
-<form method="get" asp-action="Metas" class="row g-3 mb-4">
-    <div class="col-md-3">
-        <label class="form-label fw-bold">Mês</label>
-        <select name="mes" class="form-select">
-            @for (int i = 1; i <= 12; i++)
+    <!-- Formulário GET para filtrar metas por mês e ano -->
+    <form method="get" asp-action="Metas" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label class="form-label fw-bold">Mês</label>
+            <select name="mes" class="form-select">
+                @for (int i = 1; i <= 12; i++)
             {
                 <option value="@i" selected="@(i == mesSelecionado)">
                     @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
                 </option>
             }
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label class="form-label fw-bold">Ano</label>
-        <select name="ano" class="form-select">
-            @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 5; y++)
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-bold">Ano</label>
+            <select name="ano" class="form-select">
+                @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 5; y++)
             {
                 <option value="@y" selected="@(y == anoSelecionado)">@y</option>
             }
-        </select>
-    </div>
-    <div class="col-md-3 align-self-end">
-        <button type="submit" class="btn btn-secondary">Filtrar</button>
-    </div>
-</form>
+            </select>
+        </div>
+        <div class="col-md-3 align-self-end">
+            <button type="submit" class="btn btn-secondary">Filtrar</button>
+        </div>
+    </form>
 
-<!-- Tabela de Metas -->
-<div class="card border-0 shadow-sm">
-    <div class="card-body">
-        <h4 class="mb-4">Minhas Metas</h4>
-        <table class="table">
-            <thead class="table-light">
-                <tr>
-                    <th>Meta</th>
-                    <th>Valor Alvo</th>
-                    <th>Data Limite</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var meta in Model)
+    <!-- Tabela de metas existentes -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <h4 class="mb-4">Minhas Metas</h4>
+
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Meta</th>
+                        <th>Valor Alvo</th>
+                        <th>Data Limite</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var meta in Model) // Percorre todas as metas do utilizador
                 {
                     <tr>
-                        <td>@meta.Nome</td>
-                        <td>@meta.ValorAlvo.ToString("C")</td>
-                        <td>@meta.DataLimite.ToShortDateString()</td>
+                        <td>@meta.Nome</td> <!-- Nome da meta -->
+                        <td>@meta.ValorAlvo.ToString("C")</td> <!-- Valor alvo formatado -->
+                        <td>@meta.DataLimite.ToShortDateString()</td> <!-- Data limite da meta -->
+                        <!-- Botão para eliminar a meta -->
                         <td>
                             <form asp-action="EliminarMeta" method="post" onsubmit="return confirm('Tem certeza?');">
                                 <input type="hidden" name="id" value="@meta.Id" />
@@ -92,7 +104,7 @@
                         </td>
                     </tr>
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>

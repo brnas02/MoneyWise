@@ -14,21 +14,25 @@ namespace DWebProjetoFinal.Controllers
     {
         private readonly AppDbContext _context;
 
+        // Injeção de dependência do contexto da base de dados
         public AccountController(AppDbContext appDbContext)
         {
             _context = appDbContext;
         }
 
+        // Lista todos os utilizadores (usado geralmente para o admin)
         public IActionResult Index()
         {
             return View(_context.UserAccounts.ToList());
         }
 
+        // Retorna a view de registo
         public IActionResult Registration()
         {
             return View();
         }
 
+        // Recebe e processa o formulário de registo
         [HttpPost]
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
@@ -36,6 +40,7 @@ namespace DWebProjetoFinal.Controllers
             {
                 string uniqueFileName = null;
 
+                // Se uma imagem de perfil for carregada, guarda-a na pasta /wwwroot/uploads
                 if (model.ProfileImage != null && model.ProfileImage.Length > 0)
                 {
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
@@ -50,6 +55,7 @@ namespace DWebProjetoFinal.Controllers
                     }
                 }
 
+                // Criação do objeto UserAccount com os dados fornecidos
                 UserAccount account = new UserAccount
                 {
                     Email = model.Email,
@@ -61,6 +67,7 @@ namespace DWebProjetoFinal.Controllers
                     ProfileImagePath = uniqueFileName != null ? "/uploads/" + uniqueFileName : null
                 };
 
+                // Tenta guardar o utilizador na base de dados
                 try
                 {
                     _context.UserAccounts.Add(account);
@@ -71,6 +78,7 @@ namespace DWebProjetoFinal.Controllers
                 }
                 catch (DbUpdateException)
                 {
+                    // Tratamento de erro para emails ou usernames duplicados
                     ModelState.AddModelError("", "Please enter unique Email or Password");
                     return View(model);
                 }
@@ -81,16 +89,19 @@ namespace DWebProjetoFinal.Controllers
             return View(model);
         }
 
+        // Retorna a view de login
         public IActionResult Login()
         {
             return View();
         }
 
+        // Processa o login
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
+                // Procura o utilizador por nome de utilizador ou email e valida a password
                 var user = _context.UserAccounts.FirstOrDefault(x => (x.UserName == model.UserNameOrEmail || x.Email == model.UserNameOrEmail) && x.Password == model.Password);
                 if (user != null)
                 {
@@ -100,6 +111,7 @@ namespace DWebProjetoFinal.Controllers
                         return View();
                     }
 
+                    // Criação da identidade com claims
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -108,6 +120,7 @@ namespace DWebProjetoFinal.Controllers
                         new Claim(ClaimTypes.Role, user.Role),
                     };
 
+                    // Autentica o utilizador com cookies
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
@@ -121,12 +134,14 @@ namespace DWebProjetoFinal.Controllers
             return View();
         }
 
+        // Logout do utilizador
         public IActionResult LogOut()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Apresentacao", "Home");
         }
 
+        // Página segura, apenas para utilizadores autenticados
         [Authorize]
         public IActionResult SecurePage()
         {
@@ -134,6 +149,7 @@ namespace DWebProjetoFinal.Controllers
             return View();
         }
 
+        // Retorna view de edição de perfil (dados atuais carregados)
         [HttpGet]
         [Authorize]
         public IActionResult Edit()
@@ -149,6 +165,7 @@ namespace DWebProjetoFinal.Controllers
             return View(user);
         }
 
+        // Salva as alterações feitas ao perfil do utilizador
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -164,6 +181,7 @@ namespace DWebProjetoFinal.Controllers
                 return NotFound();
             }
 
+            // Atualiza os campos permitidos do utilizador autenticado
             if (await TryUpdateModelAsync(
                 user,
                 "",
@@ -177,12 +195,14 @@ namespace DWebProjetoFinal.Controllers
             return View(updatedUser);
         }
 
+        // Acesso exclusivo a administradores: painel de admin
         [Authorize(Roles = "Admin")]
         public IActionResult AdminDashboard()
         {
             return View();
         }
 
+        // Lista todos os utilizadores para o administrador
         [Authorize(Roles = "Admin")]
         public IActionResult AdminUserList()
         {
@@ -190,6 +210,7 @@ namespace DWebProjetoFinal.Controllers
             return View(users);
         }
 
+        // Alterna entre ativar e desativar conta de utilizador
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult ToggleUserStatus(int id)
@@ -204,6 +225,7 @@ namespace DWebProjetoFinal.Controllers
             return RedirectToAction("AdminUserList");
         }
 
+        // Carrega os dados do utilizador a ser editado (admin)
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult EditUser(int id)
@@ -214,9 +236,10 @@ namespace DWebProjetoFinal.Controllers
                 return NotFound();
             }
 
-            return View("EditUser", user); // Vai usar uma view chamada EditUser.cshtml
+            return View("EditUser", user); // Utiliza a view EditUser.cshtml
         }
 
+        // Salva alterações feitas a um utilizador (admin)
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -228,7 +251,6 @@ namespace DWebProjetoFinal.Controllers
                 return NotFound();
             }
 
-            // Atualiza os campos permitidos
             user.FirstName = updatedUser.FirstName;
             user.LastName = updatedUser.LastName;
             user.Email = updatedUser.Email;
@@ -239,6 +261,7 @@ namespace DWebProjetoFinal.Controllers
             return RedirectToAction("AdminUserList");
         }
 
+        // Elimina utilizador (apenas por admin)
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteUser(int id)

@@ -1,37 +1,46 @@
 ﻿@model DWebProjetoFinal.Entities.UserAccount
 
 @{
+    // Define o título da página e o layout principal da aplicação
     ViewData["Title"] = "Editar Utilizador";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Editar Utilizador</h1>
 
+<!-- Cartão com margem e preenchimento, usando classes Bootstrap -->
 <div class="card p-4 mt-4">
-    <form asp-controller="Account" asp-action="EditUser" method="post" enctype="application/x-www-form-urlencoded">
-        @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="Id" />
 
+    <!-- Formulário para editar dados de um utilizador (versão para administradores) -->
+    <form asp-controller="Account" asp-action="EditUser" method="post" enctype="application/x-www-form-urlencoded">
+        @Html.AntiForgeryToken() <!-- Token anti-CSRF para segurança -->
+
+        <input type="hidden" asp-for="Id" /> <!-- Campo oculto para manter o ID do utilizador -->
+        <!-- Campo: Primeiro Nome -->
         <div class="mb-3">
             <label asp-for="FirstName" class="form-label">Primeiro Nome</label>
             <input asp-for="FirstName" class="form-control" />
         </div>
 
+        <!-- Campo: Último Nome -->
         <div class="mb-3">
             <label asp-for="LastName" class="form-label">Último Nome</label>
             <input asp-for="LastName" class="form-control" />
         </div>
 
+        <!-- Campo: Email -->
         <div class="mb-3">
             <label asp-for="Email" class="form-label">Email</label>
             <input asp-for="Email" class="form-control" />
         </div>
 
+        <!-- Campo: Nome de Utilizador -->
         <div class="mb-3">
             <label asp-for="UserName" class="form-label">Nome de Utilizador</label>
             <input asp-for="UserName" class="form-control" />
         </div>
 
+        <!-- Botões: Guardar e Voltar -->
         <div class="d-flex justify-content-between">
             <button type="submit" class="btn btn-success">Guardar Alterações</button>
             <a asp-action="AdminUserList" class="btn btn-secondary">Voltar à Lista</a>
@@ -40,5 +49,6 @@
 </div>
 
 @section Scripts {
+    <!-- Inclusão dos scripts de validação client-side (jQuery Unobtrusive Validation) -->
     <partial name="_ValidationScriptsPartial" />
 }
