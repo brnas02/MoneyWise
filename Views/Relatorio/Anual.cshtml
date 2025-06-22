@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Relatório Anual";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var anoAtual = DateTime.Now.Year;
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm border-0 p-5 text-center">
+        <h2 class="mb-4 fw-bold">Gerar Relatório Anual</h2>
+
+        <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+
+            <!-- Dropdown Ano -->
+            <select class="form-select form-select-lg w-auto border-dark">
+                @for (int a = anoAtual; a <= anoAtual + 5; a++)
+                {
+                    <option value="@a">@a</option>
+                }
+            </select>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <button class="btn btn-dark btn-lg px-5">Gerar Relatório</button>
+        </div>
+    </div>
+</div>
