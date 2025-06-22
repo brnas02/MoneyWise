@@ -21,14 +21,6 @@ CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var app = builder.Build();
 
-// Aplicar cultura nas requisições
-app.UseRequestLocalization(new RequestLocalizationOptions
-{
-    DefaultRequestCulture = new RequestCulture("pt-PT"),
-    SupportedCultures = new[] { cultureInfo },
-    SupportedUICultures = new[] { cultureInfo }
-});
-
 // Pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
@@ -37,8 +29,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 
+// Aplicar cultura nas requisições
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("pt-PT"),
+    SupportedCultures = new[] { cultureInfo },
+    SupportedUICultures = new[] { cultureInfo }
+});
+
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();

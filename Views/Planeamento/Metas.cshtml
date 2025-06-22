@@ -4,22 +4,19 @@
     <div class="card-body">
         <h4 class="mb-4">Adicionar Meta</h4>
         <form asp-action="CriarMeta" method="post" class="row g-3 align-items-end">
-            <!-- Nome da Meta -->
             <div class="col-md-4">
                 <label class="form-label fw-bold">Nome da Meta</label>
                 <input name="Nome" class="form-control border-0 border-bottom rounded-0" required
                        placeholder="Inserir" style="background: #f8f9fa;" />
             </div>
 
-            <!-- Valor Alvo -->
             <div class="col-md-3">
                 <label class="form-label fw-bold">Valor Alvo (€)</label>
-                <input name="ValorAlvo" type="number" step="0.01"
+                <input name="ValorAlvo" type="text"
                        class="form-control border-0 border-bottom rounded-0" required
                        placeholder="Inserir" style="background: #f8f9fa;" />
             </div>
 
-            <!-- Data Limite (Agora com input type="date") -->
             <div class="col-md-3">
                 <label class="form-label fw-bold">Data Limite</label>
                 <input name="DataLimite" type="date"
@@ -27,11 +24,8 @@
                        style="background: #f8f9fa;" />
             </div>
 
-            <!-- Botão Salvar -->
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
-                    SALVAR
-                </button>
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">SALVAR</button>
             </div>
         </form>
     </div>
