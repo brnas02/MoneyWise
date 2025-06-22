@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Bem-vindo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center py-5">
+    <img src="~/logolight.png" class="img-fluid" style="max-width: 500px;" alt="Logo MoneyWise">
+    <p class="lead">A tua plataforma de gestão financeira pessoal de forma simples, visual e eficiente.</p>
+    <a href="/Account/Login" class="btn btn-primary btn-sm mt-3 px-4 py-2 d-inline-block">Começa Agora</a>
+</div>
+
+<div class="container py-5">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <i class="fas fa-exchange-alt fa-3x text-primary mb-3"></i>
+            <h4>Transações</h4>
+            <p>Regista as tuas receitas e despesas de forma rápida e acompanha tudo mês a mês.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <i class="fas fa-bullseye fa-3x text-success mb-3"></i>
+            <h4>Metas</h4>
+            <p>Define objetivos de poupança e acompanha o teu progresso ao longo do tempo.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <i class="fas fa-wallet fa-3x text-warning mb-3"></i>
+            <h4>Orçamentos</h4>
+            <p>Controla os teus gastos com limites mensais por categoria e evita surpresas.</p>
+        </div>
+    </div>
+
+    <div class="row text-center mt-5">
+        <div class="col-md-6 offset-md-3">
+            <h4>Dashboard Visual</h4>
+            <p>Analisa o teu saldo, evolução diária, categorias de despesa e metas tudo num só lugar!</p>
+            <img src="~/dashboard.png" alt="Dashboard" class="img-fluid shadow rounded">
+        </div>
+    </div>
+</div>

@@ -124,7 +124,7 @@ namespace DWebProjetoFinal.Controllers
         public IActionResult LogOut()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Apresentacao", "Home");
         }
 
         [Authorize]

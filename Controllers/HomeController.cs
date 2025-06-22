@@ -18,9 +18,10 @@ namespace DWebProjetoFinal.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        [AllowAnonymous]
+        public IActionResult Apresentacao()
         {
-            return RedirectToAction("Dashboard");
+            return View();
         }
 
         public IActionResult Dashboard(int? mes, int? ano)
