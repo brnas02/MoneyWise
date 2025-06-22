@@ -31,6 +31,37 @@
     </div>
 </div>
 
+@{
+    var mesSelecionado = ViewBag.Mes != null ? (int)ViewBag.Mes : DateTime.Now.Month;
+    var anoSelecionado = ViewBag.Ano != null ? (int)ViewBag.Ano : DateTime.Now.Year;
+}
+
+<form method="get" asp-action="Metas" class="row g-3 mb-4">
+    <div class="col-md-3">
+        <label class="form-label fw-bold">Mês</label>
+        <select name="mes" class="form-select">
+            @for (int i = 1; i <= 12; i++)
+            {
+                <option value="@i" selected="@(i == mesSelecionado)">
+                    @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
+                </option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label fw-bold">Ano</label>
+        <select name="ano" class="form-select">
+            @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 5; y++)
+            {
+                <option value="@y" selected="@(y == anoSelecionado)">@y</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3 align-self-end">
+        <button type="submit" class="btn btn-secondary">Filtrar</button>
+    </div>
+</form>
+
 <!-- Tabela de Metas -->
 <div class="card border-0 shadow-sm">
     <div class="card-body">

@@ -2,6 +2,7 @@ using DWebProjetoFinal.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DWebProjetoFinal.Controllers
 {
@@ -22,15 +23,19 @@ namespace DWebProjetoFinal.Controllers
             return RedirectToAction("Dashboard");
         }
 
-        public IActionResult Dashboard()
+        public IActionResult Dashboard(int? mes, int? ano)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            var hoje = DateTime.Now;
-            var primeiroDiaDoMes = new DateTime(hoje.Year, hoje.Month, 1);
+            var agora = DateTime.Now;
+            int mesSelecionado = mes ?? agora.Month;
+            int anoSelecionado = ano ?? agora.Year;
+
+            var primeiroDiaDoMes = new DateTime(anoSelecionado, mesSelecionado, 1);
+            var ultimoDiaDoMes = new DateTime(anoSelecionado, mesSelecionado, DateTime.DaysInMonth(anoSelecionado, mesSelecionado));
 
             var transacoes = _context.Transacoes
-                .Where(t => t.UserId == userId && t.Data >= primeiroDiaDoMes && t.Data <= hoje)
+                .Where(t => t.UserId == userId && t.Data >= primeiroDiaDoMes && t.Data <= ultimoDiaDoMes)
                 .ToList();
 
             var receitaMensal = transacoes
@@ -59,12 +64,14 @@ namespace DWebProjetoFinal.Controllers
                 .ToList();
 
             var metas = _context.Metas
-                .Where(m => m.UserId == userId)
+                .Where(m => m.UserId == userId &&
+                            m.DataLimite.Month == mesSelecionado &&
+                            m.DataLimite.Year == anoSelecionado)
                 .OrderBy(m => m.DataLimite)
                 .ToList();
 
             var orcamentos = _context.Orcamentos
-                .Where(o => o.UserId == userId && o.Mes == hoje.Month && o.Ano == hoje.Year)
+                .Where(o => o.UserId == userId && o.Mes == mesSelecionado && o.Ano == anoSelecionado)
                 .ToList();
 
             var limiteTotal = orcamentos.Sum(o => o.LimiteMensal);
@@ -89,6 +96,8 @@ namespace DWebProjetoFinal.Controllers
             ViewBag.OrcamentoLimite = limiteTotal;
             ViewBag.OrcamentoGasto = gastoTotal;
             ViewBag.OrcamentoPercent = usoPercentagem;
+            ViewBag.Mes = mesSelecionado;
+            ViewBag.Ano = anoSelecionado;
 
             return View();
         }

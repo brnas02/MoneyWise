@@ -17,17 +17,25 @@ namespace DWebProjetoFinal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Transacoes()
+        public IActionResult Transacoes(int? mes, int? ano)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var dataAgora = DateTime.Now;
+            int mesSelecionado = mes ?? dataAgora.Month;
+            int anoSelecionado = ano ?? dataAgora.Year;
+
+            var historico = _context.Transacoes
+                .Where(t => t.UserId == userId && t.Data.Month == mesSelecionado && t.Data.Year == anoSelecionado)
+                .OrderByDescending(t => t.Data)
+                .ToList();
 
             var viewModel = new TransacaoViewModel
             {
                 NovaTransacao = new Transacao { Data = DateTime.Now },
-                Historico = _context.Transacoes
-                    .Where(t => t.UserId == userId)
-                    .OrderByDescending(t => t.Data)
-                    .ToList()
+                Historico = historico,
+                Mes = mesSelecionado,
+                Ano = anoSelecionado
             };
 
             return View(viewModel);

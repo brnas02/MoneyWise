@@ -16,10 +16,21 @@ namespace DWebProjetoFinal.Controllers
         }
 
         // ---- Métodos para Metas ----
-        public IActionResult Metas()
+        public IActionResult Metas(int? mes, int? ano)
         {
             var userId = GetUserId();
-            var metas = _context.Metas.Where(m => m.UserId == userId).ToList();
+            var mesSelecionado = mes ?? DateTime.Now.Month;
+            var anoSelecionado = ano ?? DateTime.Now.Year;
+
+            var metas = _context.Metas
+                .Where(m => m.UserId == userId &&
+                            m.DataLimite.Month == mesSelecionado &&
+                            m.DataLimite.Year == anoSelecionado)
+                .ToList();
+
+            ViewBag.Mes = mesSelecionado;
+            ViewBag.Ano = anoSelecionado;
+
             return View(metas);
         }
 
@@ -52,12 +63,21 @@ namespace DWebProjetoFinal.Controllers
         }
 
         // ---- Métodos para Orçamento ----
-        public IActionResult Orcamento()
+        public IActionResult Orcamento(int? mes, int? ano)
         {
             var userId = GetUserId();
+            var mesSelecionado = mes ?? DateTime.Now.Month;
+            var anoSelecionado = ano ?? DateTime.Now.Year;
+
             var orcamentos = _context.Orcamentos
-                .Where(o => o.UserId == userId && o.Mes == DateTime.Now.Month && o.Ano == DateTime.Now.Year)
+                .Where(o => o.UserId == userId &&
+                            o.Mes == mesSelecionado &&
+                            o.Ano == anoSelecionado)
                 .ToList();
+
+            ViewBag.Mes = mesSelecionado;
+            ViewBag.Ano = anoSelecionado;
+
             return View(orcamentos);
         }
 

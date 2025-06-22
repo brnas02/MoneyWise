@@ -1,7 +1,36 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var mesSelecionado = ViewBag.Mes != null ? (int)ViewBag.Mes : DateTime.Now.Month;
+    var anoSelecionado = ViewBag.Ano != null ? (int)ViewBag.Ano : DateTime.Now.Year;
 }
+
+<form method="get" asp-action="Dashboard" class="row g-3 mb-4">
+    <div class="col-md-2">
+        <label class="form-label fw-bold">Mês</label>
+        <select name="mes" class="form-select">
+            @for (int i = 1; i <= 12; i++)
+            {
+                <option value="@i" selected="@(i == mesSelecionado)">
+                    @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
+                </option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold">Ano</label>
+        <select name="ano" class="form-select">
+            @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 5; y++)
+            {
+                <option value="@y" selected="@(y == anoSelecionado)">@y</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2 align-self-end">
+        <button type="submit" class="btn btn-secondary">Filtrar</button>
+    </div>
+</form>
 
 <div class="dashboard-row">
     <div class="box">Receita Mensal<br /><strong>@ViewBag.Receita.ToString("C")</strong></div>
@@ -122,7 +151,7 @@
     </div>
 
     <div class="box">
-        Orçamento Mensal<br />
+        <h4>Orçamento Mensal</h4>
         <strong>@ViewBag.OrcamentoGasto.ToString("C") / @ViewBag.OrcamentoLimite.ToString("C")</strong>
         <div style="margin-top: 10px; font-size: 0.9em; color: #555;">
             Utilizado: @ViewBag.OrcamentoPercent.ToString("0.##")%
