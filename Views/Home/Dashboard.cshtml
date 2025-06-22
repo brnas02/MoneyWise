@@ -3,19 +3,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="dashboard-cards">
-    <div class="card">Receita Mensal<br /><strong>@ViewBag.Receita.ToString("C")</strong></div>
-    <div class="card">Despesa Mensal<br /><strong>@ViewBag.Despesa.ToString("C")</strong></div>
-    <div class="card">Saldo Atual<br /><strong>@ViewBag.Saldo.ToString("C")</strong></div>
+<div class="dashboard-row">
+    <div class="box">Receita Mensal<br /><strong>@ViewBag.Receita.ToString("C")</strong></div>
+    <div class="box">Despesa Mensal<br /><strong>@ViewBag.Despesa.ToString("C")</strong></div>
+    <div class="box">Saldo Atual<br /><strong>@ViewBag.Saldo.ToString("C")</strong></div>
 </div>
 
 <div class="dashboard-row">
-    <div class="box-situacao">
+    <div class="box box-situacao">
         <h4>Situação Mensal</h4>
         <canvas id="linhaChart"></canvas>
     </div>
 
-    <div class="box-despesas">
+    <div class="box box-despesas">
         <h4>Categorias de Despesas</h4>
         <table>
             <thead>
@@ -52,7 +52,7 @@
 }
 
 <div class="dashboard-row" style="align-items: flex-start;">
-    <div class="box-grafico" style="display: flex; gap: 40px; align-items: center;">
+    <div class="box box-grafico" style="display: flex; gap: 40px; align-items: center;">
         <div style="flex: 1;">
             <h4>Despesas Mensais Repartidas</h4>
             <canvas id="donutChart"></canvas>
@@ -82,7 +82,7 @@
         </ul>
     </div>
 
-    <div class="box-metas">
+    <div class="box box-metas">
         <h4>Meta de Economia Mensal</h4>
 
         <div class="progress-container">
@@ -120,6 +120,14 @@
             </div>
         }
     </div>
+
+    <div class="box">
+        Orçamento Mensal<br />
+        <strong>@ViewBag.OrcamentoGasto.ToString("C") / @ViewBag.OrcamentoLimite.ToString("C")</strong>
+        <div style="margin-top: 10px; font-size: 0.9em; color: #555;">
+            Utilizado: @ViewBag.OrcamentoPercent.ToString("0.##")%
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -138,27 +146,26 @@
             }
 
             const ctxLinha = document.getElementById('linhaChart')?.getContext('2d');
-                const linhaChart = new Chart(ctxLinha, {
-                    type: 'line',
-                    data: {
-                        labels: dadosDiarios.map(d => d.Dia),
-                        datasets: [{
-                            label: 'Evolução Mensal',
-                            data: dadosDiarios.map(d => d.Saldo),
-                            borderColor: 'black',
-                            fill: false,
-                            tension: 0.3
-                        }]
-                    },
-                    options: {
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
+            const linhaChart = new Chart(ctxLinha, {
+                type: 'line',
+                data: {
+                    labels: dadosDiarios.map(d => d.Dia),
+                    datasets: [{
+                        label: 'Evolução Mensal',
+                        data: dadosDiarios.map(d => d.Saldo),
+                        borderColor: 'black',
+                        fill: false,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
                         }
                     }
-                });
-
+                }
+            });
 
             const ctxDonut = document.getElementById('donutChart')?.getContext('2d');
             const donutChart = new Chart(ctxDonut, {
@@ -185,39 +192,6 @@
 }
 
 <style>
-    .dashboard-cards {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 30px;
-        justify-content: center;
-    }
-
-    .card {
-        flex: 1;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-        font-size: 0.95em;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-width: 200px;
-        max-width: 300px;
-    }
-
-        .card strong {
-            font-size: 1.8em;
-            color: #000;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-    canvas {
-        max-width: 100%;
-        max-height: 300px;
-    }
-
     .dashboard-row {
         display: flex;
         gap: 40px;
@@ -228,10 +202,7 @@
         align-items: stretch;
     }
 
-    .box-situacao,
-    .box-despesas,
-    .box-grafico,
-    .box-metas {
+    .box {
         background-color: #fff;
         border-radius: 12px;
         padding: 24px;
@@ -239,32 +210,40 @@
         flex: 1;
         min-width: 300px;
         max-width: 100%;
+        font-size: 0.95em;
     }
 
-        .box-despesas table,
-        .tabela-metas {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+        .box strong {
+            font-size: 1.8em;
+            color: #000;
+            margin-top: 10px;
+            font-weight: bold;
         }
 
-            .box-despesas th,
-            .tabela-metas th {
-                text-align: left;
-                font-weight: 600;
-                font-size: 1em;
-                color: #333;
-                padding-bottom: 10px;
-                border-bottom: 1px solid #ddd;
-            }
+    .box-despesas table,
+    .tabela-metas {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
 
-            .box-despesas td,
-            .tabela-metas td {
-                padding: 6px 0;
-                font-size: 0.95em;
-                color: #222;
-                border-bottom: 1px solid #f0f0f0;
-            }
+        .box-despesas th,
+        .tabela-metas th {
+            text-align: left;
+            font-weight: 600;
+            font-size: 1em;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .box-despesas td,
+        .tabela-metas td {
+            padding: 6px 0;
+            font-size: 0.95em;
+            color: #222;
+            border-bottom: 1px solid #f0f0f0;
+        }
 
     .progress-container {
         width: 100%;
@@ -300,5 +279,10 @@
         width: 16px;
         height: 16px;
         border-radius: 3px;
+    }
+
+    canvas {
+        max-width: 100%;
+        max-height: 300px;
     }
 </style>

@@ -63,6 +63,14 @@ namespace DWebProjetoFinal.Controllers
                 .OrderBy(m => m.DataLimite)
                 .ToList();
 
+            var orcamentos = _context.Orcamentos
+                .Where(o => o.UserId == userId && o.Mes == hoje.Month && o.Ano == hoje.Year)
+                .ToList();
+
+            var limiteTotal = orcamentos.Sum(o => o.LimiteMensal);
+            var gastoTotal = orcamentos.Sum(o => o.GastoAtual);
+            var usoPercentagem = limiteTotal > 0 ? (gastoTotal / limiteTotal * 100) : 0;
+
             List<object> saldoAcumulado = new();
             decimal saldoAtual = 0;
 
@@ -78,6 +86,9 @@ namespace DWebProjetoFinal.Controllers
             ViewBag.Categorias = categoriasDespesa;
             ViewBag.Diario = saldoAcumulado;
             ViewBag.Metas = metas;
+            ViewBag.OrcamentoLimite = limiteTotal;
+            ViewBag.OrcamentoGasto = gastoTotal;
+            ViewBag.OrcamentoPercent = usoPercentagem;
 
             return View();
         }
