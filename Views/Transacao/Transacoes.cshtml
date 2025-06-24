@@ -1,4 +1,4 @@
-﻿@model DWebProjetoFinal.Models.TransacaoViewModel
+﻿@model List<DWebProjetoFinal.Entities.Transacao>
 
 @{
     // Define o título da aba da página
@@ -31,8 +31,8 @@
 
             <!-- Campo: Tipo de transação (Receita ou Despesa) -->
             <div class="col-md-3">
-                <label asp-for="NovaTransacao.TipoTransacao" class="form-label fw-bold">Tipo</label>
-                <select asp-for="NovaTransacao.TipoTransacao" class="form-select border-0 border-bottom rounded-0" style="background: #f8f9fa;">
+                <label class="form-label fw-bold">Tipo</label>
+                <select name="TipoTransacao" class="form-select border-0 border-bottom rounded-0" style="background: #f8f9fa; background-image: url(&quot;data:image/svg+xml,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='%23f8f9fa' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%23343A40' stroke-width='1.5'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 10px center;">
                     <option value="Receita">Receita</option>
                     <option value="Despesa">Despesa</option>
                 </select>
@@ -40,43 +40,37 @@
 
             <!-- Campo: Categoria da transação -->
             <div class="col-md-3">
-                <label asp-for="NovaTransacao.Categoria" class="form-label fw-bold">Categoria</label>
-                <input asp-for="NovaTransacao.Categoria" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+                <label class="form-label fw-bold">Categoria</label>
+                <input name="Categoria" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
             </div>
 
             <!-- Campo: Valor da transação -->
             <div class="col-md-3">
-                <label asp-for="NovaTransacao.Valor" class="form-label fw-bold">Valor (€)</label>
-                <input name="NovaTransacao.Valor" type="text"
+                <label class="form-label fw-bold">Valor (€)</label>
+                <input name="Valor" type="text"
                        class="form-control border-0 border-bottom rounded-0"
                        style="background: #f8f9fa;" placeholder="Inserir" value="" />
             </div>
 
             <!-- Campo: Data da transação -->
             <div class="col-md-3">
-                <label asp-for="NovaTransacao.Data" class="form-label fw-bold">Data</label>
-                <input asp-for="NovaTransacao.Data" type="date" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" />
+                <label class="form-label fw-bold">Data</label>
+                <input name="Data" type="date" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" />
             </div>
 
             <!-- Campo: Descrição opcional -->
             <div class="col-md-6">
-                <label asp-for="NovaTransacao.Descricao" class="form-label fw-bold">Descrição (Opcional)</label>
-                <input asp-for="NovaTransacao.Descricao" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+                <label class="form-label fw-bold">Descrição (Opcional)</label>
+                <input name="Descricao" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
             </div>
 
             <!-- Botão de submissão do formulário -->
             <div class="col-md-3 offset-md-9">
-                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">SALVAR</button>
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">GUARDAR</button>
             </div>
         </form>
     </div>
 </div>
-
-@{
-    // Obtem o mês e ano selecionados no modelo
-    var mesSelecionado = Model.Mes;
-    var anoSelecionado = Model.Ano;
-}
 
 <!-- Formulário de filtro para transações por mês e ano -->
 <form method="get" asp-action="Transacoes" class="row g-3 mb-4">
@@ -86,7 +80,7 @@
         <select name="mes" class="form-select">
             @for (int i = 1; i <= 12; i++)
             {
-            <option value="@i" selected="@(i == mesSelecionado)">
+                <option value="@i" selected="@(i == DateTime.Now.Month)">
                 @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
             </option>
             }
@@ -99,7 +93,7 @@
         <select name="ano" class="form-select">
             @for (int y = DateTime.Now.Year - 2; y <= DateTime.Now.Year + 5; y++)
             {
-            <option value="@y" selected="@(y == anoSelecionado)">@y</option>
+                <option value="@y" selected="@(y == DateTime.Now.Year)">@y</option>
             }
         </select>
     </div>
@@ -128,7 +122,7 @@
             </thead>
             <tbody>
                 <!-- Iteração sobre as transações existentes -->
-                @foreach (var transacao in Model.Historico)
+                @foreach (var transacao in Model)
                 {
                 <tr>
                     <td>@transacao.Data.ToString("dd/MM/yyyy")</td>

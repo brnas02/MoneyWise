@@ -12,6 +12,9 @@ namespace DWebProjetoFinal.Entities
         // Tabela de utilizadores (contas de login)
         public DbSet<UserAccount> UserAccounts { get; set; }
 
+        // Tabela de roles
+        public DbSet<Role> Roles { get; set; }
+
         // Tabela de transações financeiras (receitas/despesas)
         public DbSet<Transacao> Transacoes { get; set; }
 
@@ -21,10 +24,33 @@ namespace DWebProjetoFinal.Entities
         // Tabela de orçamentos mensais
         public DbSet<Orcamento> Orcamentos { get; set; }
 
+        // Tabela de Transacoes de users
+        public DbSet<UserTransacao> UserTransacao { get; set; }
+
         // ------------------ Configurações adicionais com Fluent API ------------------
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Cria as roles
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = 1, Type = "Pessoal" },
+                new Role { Id = 2, Type = "Empresarial" },
+                new Role { Id = 3, Type = "Admin" }
+            );
+
+            modelBuilder.Entity<UserTransacao>()
+                .HasKey(ut => new { ut.UserAccountId, ut.TransacaoId });
+
+            modelBuilder.Entity<UserTransacao>()
+                .HasOne(ut => ut.UserAccount)
+                .WithMany(u => u.UserTransacoes)
+                .HasForeignKey(ut => ut.UserAccountId);
+
+            modelBuilder.Entity<UserTransacao>()
+                .HasOne(ut => ut.Transacao)
+                .WithMany(t => t.UserTransacoes)
+                .HasForeignKey(ut => ut.TransacaoId);
+
             // Configura índice único para garantir que um utilizador não tenha mais de um orçamento
             // para a mesma categoria, mês e ano
             modelBuilder.Entity<Orcamento>()

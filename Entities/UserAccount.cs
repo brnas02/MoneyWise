@@ -41,7 +41,7 @@ namespace DWebProjetoFinal.Entities
 
         // Função do utilizador (ex: Admin, Empresarial, Utilizador normal)
         [Required(ErrorMessage = "Selecione o tipo de conta.")]
-        public string Role { get; set; }
+        public int RoleId { get; set; }
 
         // Caminho para imagem de perfil (opcional, até 255 caracteres)
         [MaxLength(255, ErrorMessage = "Max 255 characters allowed.")]
@@ -49,5 +49,9 @@ namespace DWebProjetoFinal.Entities
 
         // Indica se a conta está ativa ou desativada (por padrão, ativa)
         public bool IsActive { get; set; } = true;
+
+        public Role Role { get; set; } = null!;
+
+        public ICollection<UserTransacao> UserTransacoes { get; set; }
     }
 }

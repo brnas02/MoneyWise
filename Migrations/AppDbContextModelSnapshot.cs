@@ -55,7 +55,7 @@ namespace DWebProjetoFinal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Metas");
+                    b.ToTable("Metas", (string)null);
                 });
 
             modelBuilder.Entity("DWebProjetoFinal.Entities.Orcamento", b =>
@@ -91,7 +91,45 @@ namespace DWebProjetoFinal.Migrations
                     b.HasIndex("UserId", "Categoria", "Mes", "Ano")
                         .IsUnique();
 
-                    b.ToTable("Orcamentos");
+                    b.ToTable("Orcamentos", (string)null);
+                });
+
+            modelBuilder.Entity("DWebProjetoFinal.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Type")
+                        .IsUnique();
+
+                    b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Type = "Pessoal"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Type = "Empresarial"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Type = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("DWebProjetoFinal.Entities.Transacao", b =>
@@ -119,15 +157,12 @@ namespace DWebProjetoFinal.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Transacoes");
+                    b.ToTable("Transacoes", (string)null);
                 });
 
             modelBuilder.Entity("DWebProjetoFinal.Entities.UserAccount", b =>
@@ -165,10 +200,8 @@ namespace DWebProjetoFinal.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -180,10 +213,67 @@ namespace DWebProjetoFinal.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("RoleId");
+
                     b.HasIndex("UserName")
                         .IsUnique();
 
-                    b.ToTable("UserAccounts");
+                    b.ToTable("UserAccounts", (string)null);
+                });
+
+            modelBuilder.Entity("DWebProjetoFinal.Entities.UserTransacao", b =>
+                {
+                    b.Property<int>("UserAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransacaoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserAccountId", "TransacaoId");
+
+                    b.HasIndex("TransacaoId");
+
+                    b.ToTable("UserTransacao", (string)null);
+                });
+
+            modelBuilder.Entity("DWebProjetoFinal.Entities.UserAccount", b =>
+                {
+                    b.HasOne("DWebProjetoFinal.Entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("DWebProjetoFinal.Entities.UserTransacao", b =>
+                {
+                    b.HasOne("DWebProjetoFinal.Entities.Transacao", "Transacao")
+                        .WithMany("UserTransacoes")
+                        .HasForeignKey("TransacaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DWebProjetoFinal.Entities.UserAccount", "UserAccount")
+                        .WithMany("UserTransacoes")
+                        .HasForeignKey("UserAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Transacao");
+
+                    b.Navigation("UserAccount");
+                });
+
+            modelBuilder.Entity("DWebProjetoFinal.Entities.Transacao", b =>
+                {
+                    b.Navigation("UserTransacoes");
+                });
+
+            modelBuilder.Entity("DWebProjetoFinal.Entities.UserAccount", b =>
+                {
+                    b.Navigation("UserTransacoes");
                 });
 #pragma warning restore 612, 618
         }

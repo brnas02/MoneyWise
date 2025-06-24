@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DWebProjetoFinal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250617214402_CreateMetaAndOrcamentoTables")]
-    partial class CreateMetaAndOrcamentoTables
+    [Migration("20250624023447_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,6 +97,44 @@ namespace DWebProjetoFinal.Migrations
                     b.ToTable("Orcamentos");
                 });
 
+            modelBuilder.Entity("DWebProjetoFinal.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Type")
+                        .IsUnique();
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Type = "Pessoal"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Type = "Empresarial"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Type = "Admin"
+                        });
+                });
+
             modelBuilder.Entity("DWebProjetoFinal.Entities.Transacao", b =>
                 {
                     b.Property<int>("Id")
@@ -151,6 +189,9 @@ namespace DWebProjetoFinal.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -165,7 +206,7 @@ namespace DWebProjetoFinal.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -178,10 +219,23 @@ namespace DWebProjetoFinal.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("RoleId");
+
                     b.HasIndex("UserName")
                         .IsUnique();
 
                     b.ToTable("UserAccounts");
+                });
+
+            modelBuilder.Entity("DWebProjetoFinal.Entities.UserAccount", b =>
+                {
+                    b.HasOne("DWebProjetoFinal.Entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 #pragma warning restore 612, 618
         }

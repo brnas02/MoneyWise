@@ -30,7 +30,7 @@
             <div class="container-fluid px-4">
                 @* Logotipo com link para página de apresentação *@
                 <a class="navbar-brand" asp-controller="Home" asp-action="Apresentacao">
-                    <img src="~/logo.png" alt="Logo" width="30" height="30" />
+                    <img src="~/logo.png" alt="Logo" height="30" />
                 </a>
 
                 @* Botão toggle para o menu mobile *@
@@ -50,7 +50,7 @@
                             <a class="btn btn-light mx-2" asp-controller="Transacao" asp-action="Transacoes">Transações</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="btn btn-light mx-2 dropdown-toggle" data-bs-toggle="dropdown">
+                            <a class="btn btn-light mx-2 dropdown-toggle text-dark" data-bs-toggle="dropdown">
                                 Planeamento
                             </a>
                             <ul class="dropdown-menu">
@@ -63,7 +63,7 @@
                         @if (User.IsInRole("Empresarial") || User.IsInRole("Admin"))
                             {
                         <li class="nav-item dropdown">
-                            <a class="btn btn-light mx-2 dropdown-toggle" data-bs-toggle="dropdown">
+                            <a class="btn btn-light mx-2 dropdown-toggle text-dark" data-bs-toggle="dropdown">
                                 Relatório
                             </a>
                             <ul class="dropdown-menu">

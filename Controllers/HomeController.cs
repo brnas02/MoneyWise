@@ -43,9 +43,13 @@ namespace DWebProjetoFinal.Controllers
             var ultimoDiaDoMes = new DateTime(anoSelecionado, mesSelecionado, DateTime.DaysInMonth(anoSelecionado, mesSelecionado));
 
             // Busca todas as transações do utilizador dentro do intervalo do mês
-            var transacoes = _context.Transacoes
-                .Where(t => t.UserId == userId && t.Data >= primeiroDiaDoMes && t.Data <= ultimoDiaDoMes)
+            var transacoes = _context.UserTransacao
+                .Where(ut => ut.UserAccountId == userId &&
+                             ut.Transacao.Data >= primeiroDiaDoMes &&
+                             ut.Transacao.Data <= ultimoDiaDoMes)
+                .Select(ut => ut.Transacao)
                 .ToList();
+
 
             // Soma de receitas no mês
             var receitaMensal = transacoes

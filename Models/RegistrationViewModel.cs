@@ -44,6 +44,6 @@ namespace DWebProjetoFinal.Models
         public string Role { get; set; } = "User";
 
         // Upload de imagem de perfil (opcional)
-        public IFormFile ProfileImage { get; set; }
+        public IFormFile? ProfileImage { get; set; }
     }
 }

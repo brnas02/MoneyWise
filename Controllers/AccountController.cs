@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.IO;
+using System.Drawing;
 
 namespace DWebProjetoFinal.Controllers
 {
@@ -41,18 +42,37 @@ namespace DWebProjetoFinal.Controllers
                 string uniqueFileName = null;
 
                 // Se uma imagem de perfil for carregada, guarda-a na pasta /wwwroot/uploads
-                if (model.ProfileImage != null && model.ProfileImage.Length > 0)
+                if (model.ProfileImage != null)
                 {
-                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                    Directory.CreateDirectory(uploadsFolder);
+                    const long MaxFileSize = 100 * 1024 * 1024;
 
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    if (model.ProfileImage.Length > 0 && model.ProfileImage.Length < MaxFileSize && IsValidImage(model.ProfileImage))
                     {
-                        await model.ProfileImage.CopyToAsync(stream);
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                        Directory.CreateDirectory(uploadsFolder);
+
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await model.ProfileImage.CopyToAsync(stream);
+                        }
                     }
+                    else
+                    {
+                        // Tratamento de uploads de imagens
+                        ModelState.AddModelError("", "Invalid Image");
+                        return View(model);
+                    }
+                }
+
+                var role = _context.Roles.FirstOrDefault(r => r.Type == model.Role);
+
+                if (role == null || role.Type == "Admin")
+                {
+                    ModelState.AddModelError("", "An unexpected error ocurred");
+                    return View(model);
                 }
 
                 // Criação do objeto UserAccount com os dados fornecidos
@@ -63,7 +83,7 @@ namespace DWebProjetoFinal.Controllers
                     LastName = model.LastName,
                     Password = model.Password,
                     UserName = model.UserName,
-                    Role = model.Role,
+                    RoleId = role.Id,
                     ProfileImagePath = uniqueFileName != null ? "/uploads/" + uniqueFileName : null
                 };
 
@@ -111,13 +131,15 @@ namespace DWebProjetoFinal.Controllers
                         return View();
                     }
 
+                    var role = _context.Roles.FirstOrDefault(r => r.Id == user.RoleId);
+
                     // Criação da identidade com claims
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.UserName),
                         new Claim("Name", user.FirstName),
-                        new Claim(ClaimTypes.Role, user.Role),
+                        new Claim(ClaimTypes.Role, role.Type),
                     };
 
                     // Autentica o utilizador com cookies
@@ -274,6 +296,26 @@ namespace DWebProjetoFinal.Controllers
             }
 
             return RedirectToAction("AdminUserList");
+        }
+
+        private bool IsValidImage(IFormFile file)
+        {
+            try
+            {
+                using (var stream = file.OpenReadStream())
+                {
+                    using (var image = Image.FromStream(stream))
+                    {
+                        // Successfully loaded image
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                // Not a valid image
+                return false;
+            }
         }
     }
 }

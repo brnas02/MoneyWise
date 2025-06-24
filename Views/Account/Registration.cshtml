@@ -43,7 +43,6 @@
         }
 
         .register-logo {
-            width: 40px;
             height: 40px;
             margin-bottom: 10px;
         }
@@ -144,7 +143,7 @@
             <span asp-validation-for="Role" class="text-danger"></span>
 
             <!-- Upload de imagem de perfil -->
-            <input asp-for="ProfileImage" type="file" class="form-control" />
+            <input asp-for="ProfileImage" type="file" accept="image/*" class="form-control" />
             <span asp-validation-for="ProfileImage" class="text-danger"></span>
 
             <!-- Botão de submissão -->

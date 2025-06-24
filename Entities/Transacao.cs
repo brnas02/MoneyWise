@@ -9,10 +9,6 @@ namespace DWebProjetoFinal.Entities
         [Key]
         public int Id { get; set; }
 
-        // ID do utilizador a quem pertence esta transação
-        [Required]
-        public int UserId { get; set; }
-
         // Tipo de transação: "Receita" ou "Despesa"
         [Required]
         [MaxLength(20)]
@@ -35,5 +31,7 @@ namespace DWebProjetoFinal.Entities
         // Data em que a transação ocorreu (obrigatória)
         [Required]
         public DateTime Data { get; set; }
+
+        public ICollection<UserTransacao>? UserTransacoes { get; set; }
     }
 }
