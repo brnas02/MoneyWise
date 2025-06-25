@@ -19,6 +19,9 @@ var cultureInfo = new CultureInfo("pt-PT");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 // Pipeline HTTP
@@ -43,6 +46,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Rota padrão
 app.MapControllerRoute(
