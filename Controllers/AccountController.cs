@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.IO;
 using System.Drawing;
+using Microsoft.AspNetCore.Identity;
 
 namespace DWebProjetoFinal.Controllers
 {
@@ -76,16 +77,19 @@ namespace DWebProjetoFinal.Controllers
                 }
 
                 // Criação do objeto UserAccount com os dados fornecidos
+                var hasher = new PasswordHasher<UserAccount>();
                 UserAccount account = new UserAccount
                 {
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Password = model.Password,
                     UserName = model.UserName,
                     RoleId = role.Id,
                     ProfileImagePath = uniqueFileName != null ? "/uploads/" + uniqueFileName : null
                 };
+
+                // Aplica hash à password
+                account.Password = hasher.HashPassword(account, model.Password);
 
                 // Tenta guardar o utilizador na base de dados
                 try
@@ -119,11 +123,14 @@ namespace DWebProjetoFinal.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            var user = _context.UserAccounts.FirstOrDefault(x => x.UserName == model.UserNameOrEmail || x.Email == model.UserNameOrEmail);
+
+            if (user != null)
             {
-                // Procura o utilizador por nome de utilizador ou email e valida a password
-                var user = _context.UserAccounts.FirstOrDefault(x => (x.UserName == model.UserNameOrEmail || x.Email == model.UserNameOrEmail) && x.Password == model.Password);
-                if (user != null)
+                var hasher = new PasswordHasher<UserAccount>();
+                var result = hasher.VerifyHashedPassword(user, user.Password, model.Password);
+
+                if (result == PasswordVerificationResult.Success)
                 {
                     if (!user.IsActive)
                     {
@@ -133,7 +140,6 @@ namespace DWebProjetoFinal.Controllers
 
                     var role = _context.Roles.FirstOrDefault(r => r.Id == user.RoleId);
 
-                    // Criação da identidade com claims
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -142,17 +148,14 @@ namespace DWebProjetoFinal.Controllers
                         new Claim(ClaimTypes.Role, role.Type),
                     };
 
-                    // Autentica o utilizador com cookies
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
                     return RedirectToAction("Dashboard", "Home");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Username/Email or Password is not correct");
-                }
             }
+
+            ModelState.AddModelError("", "Username/Email or Password is not correct");
             return View();
         }
 

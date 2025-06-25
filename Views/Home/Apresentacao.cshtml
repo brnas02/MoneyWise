@@ -8,7 +8,10 @@
 <div class="text-center py-5">
     <img src="~/logolight.png" class="img-fluid" style="max-width: 500px;" alt="Logo MoneyWise" />
     <p class="lead">A tua plataforma de gestão financeira pessoal de forma simples, visual e eficiente.</p>
-    <a href="/Account/Login" class="btn btn-primary btn-sm mt-3 px-4 py-2 d-inline-block">Começa Agora</a>
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <a href="/Account/Login" class="btn btn-primary btn-sm mt-3 px-4 py-2 d-inline-block">Começa Agora</a>
+    }
 </div>
 
 <!-- Secção com apresentação das principais funcionalidades -->
