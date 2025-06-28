@@ -28,13 +28,13 @@ namespace DWebProjetoFinal.Controllers
             return View(_context.UserAccounts.ToList());
         }
 
-        // Retorna a view de registo
+        [HttpGet]
         public IActionResult Registration()
         {
             return View();
         }
 
-        // Recebe e processa o formulário de registo
+        // Retorna a view de registo
         [HttpPost]
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
@@ -42,7 +42,6 @@ namespace DWebProjetoFinal.Controllers
             {
                 string uniqueFileName = null;
 
-                // Se uma imagem de perfil for carregada, guarda-a na pasta /wwwroot/uploads
                 if (model.ProfileImage != null)
                 {
                     const long MaxFileSize = 100 * 1024 * 1024;
@@ -62,8 +61,7 @@ namespace DWebProjetoFinal.Controllers
                     }
                     else
                     {
-                        // Tratamento de uploads de imagens
-                        ModelState.AddModelError("", "Invalid Image");
+                        ModelState.AddModelError("", "Imagem Inválida");
                         return View(model);
                     }
                 }
@@ -72,12 +70,13 @@ namespace DWebProjetoFinal.Controllers
 
                 if (role == null || role.Type == "Admin")
                 {
-                    ModelState.AddModelError("", "An unexpected error ocurred");
+                    ModelState.AddModelError("", "Um erro inesperado ocorreu");
                     return View(model);
                 }
 
-                // Criação do objeto UserAccount com os dados fornecidos
                 var hasher = new PasswordHasher<UserAccount>();
+
+                // Cria o utilizador sem password
                 UserAccount account = new UserAccount
                 {
                     Email = model.Email,
@@ -88,22 +87,30 @@ namespace DWebProjetoFinal.Controllers
                     ProfileImagePath = uniqueFileName != null ? "/uploads/" + uniqueFileName : null
                 };
 
-                // Aplica hash à password
-                account.Password = hasher.HashPassword(account, model.Password);
-
-                // Tenta guardar o utilizador na base de dados
                 try
                 {
+                    // Adiciona e guarda para obter o Id
                     _context.UserAccounts.Add(account);
                     await _context.SaveChangesAsync();
 
+                    // Cria UserSeguranca com hash da password e associa ao utilizador
+                    var hashedPassword = hasher.HashPassword(account, model.Password);
+                    var userSeguranca = new UserSeguranca
+                    {
+                        UserId = account.Id,
+                        Password = hashedPassword,
+                        DataCriacao = DateTime.Now
+                    };
+
+                    _context.UserSeguranca.Add(userSeguranca);
+                    await _context.SaveChangesAsync();
+
                     ModelState.Clear();
-                    ViewBag.Message = $"{account.FirstName} {account.LastName} registered successfully. Please login";
+                    ViewBag.Message = $"{account.FirstName} {account.LastName} registado com sucesso";
                 }
                 catch (DbUpdateException)
                 {
-                    // Tratamento de erro para emails ou usernames duplicados
-                    ModelState.AddModelError("", "Please enter unique Email or Password");
+                    ModelState.AddModelError("", "Coloque um Email ou Username válido");
                     return View(model);
                 }
 
@@ -113,22 +120,24 @@ namespace DWebProjetoFinal.Controllers
             return View(model);
         }
 
-        // Retorna a view de login
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // Processa o login
+        // Retorna a view de login
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
-            var user = _context.UserAccounts.FirstOrDefault(x => x.UserName == model.UserNameOrEmail || x.Email == model.UserNameOrEmail);
+            var user = _context.UserAccounts
+                .Include(u => u.UserSeguranca)
+                .FirstOrDefault(x => x.UserName == model.UserNameOrEmail || x.Email == model.UserNameOrEmail);
 
-            if (user != null)
+            if (user != null && user.UserSeguranca != null)
             {
                 var hasher = new PasswordHasher<UserAccount>();
-                var result = hasher.VerifyHashedPassword(user, user.Password, model.Password);
+                var result = hasher.VerifyHashedPassword(user, user.UserSeguranca.Password, model.Password);
 
                 if (result == PasswordVerificationResult.Success)
                 {
@@ -141,12 +150,12 @@ namespace DWebProjetoFinal.Controllers
                     var role = _context.Roles.FirstOrDefault(r => r.Id == user.RoleId);
 
                     var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name, user.UserName),
-                        new Claim("Name", user.FirstName),
-                        new Claim(ClaimTypes.Role, role.Type),
-                    };
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim("Name", user.FirstName),
+                new Claim(ClaimTypes.Role, role.Type),
+            };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
@@ -155,7 +164,7 @@ namespace DWebProjetoFinal.Controllers
                 }
             }
 
-            ModelState.AddModelError("", "Username/Email or Password is not correct");
+            ModelState.AddModelError("", "Nome de utilizador/email ou palavra-passe incorretos");
             return View();
         }
 
@@ -164,14 +173,6 @@ namespace DWebProjetoFinal.Controllers
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Apresentacao", "Home");
-        }
-
-        // Página segura, apenas para utilizadores autenticados
-        [Authorize]
-        public IActionResult SecurePage()
-        {
-            ViewBag.Name = HttpContext.User.Identity.Name;
-            return View();
         }
 
         // Retorna view de edição de perfil (dados atuais carregados)

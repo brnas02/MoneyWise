@@ -27,6 +27,9 @@ namespace DWebProjetoFinal.Entities
         // Tabela de Transacoes de users
         public DbSet<UserTransacao> UserTransacao { get; set; }
 
+        // Tabela de segurança de utilizadores (passwords)
+        public DbSet<UserSeguranca> UserSeguranca { get; set; }
+
         // ------------------ Configurações adicionais com Fluent API ------------------
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

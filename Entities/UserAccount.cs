@@ -26,10 +26,6 @@ namespace DWebProjetoFinal.Entities
         [MaxLength(100, ErrorMessage = "Máximo 100 caracteres.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Campo obrigatório.")]
-        [MaxLength(255, ErrorMessage = "Máximo 255 caracteres.")]
-        public string Password { get; set; }
-
         [Required(ErrorMessage = "Selecione o tipo de conta.")]
         public int RoleId { get; set; }
 
@@ -41,5 +37,7 @@ namespace DWebProjetoFinal.Entities
         public Role Role { get; set; } = null!;
 
         public ICollection<UserTransacao> UserTransacoes { get; set; }
+
+        public UserSeguranca UserSeguranca { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace DWebProjetoFinal.Models
     public class LoginViewModel
     {
         [Required(ErrorMessage = "Campo obrigatório.")]
-        [MaxLength(20, ErrorMessage = "Máximo 20 caracteres.")]
+        [MaxLength(50, ErrorMessage = "Máximo 50 caracteres.")]
         [DisplayName("Nome de utilizador ou Email")]
         public string UserNameOrEmail { get; set; }
 

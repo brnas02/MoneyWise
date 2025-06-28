@@ -32,6 +32,7 @@ namespace DWebProjetoFinal.Models
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
+        [Required(ErrorMessage = "Campo obrigatório.")]
         public string Role { get; set; } = "User";
 
         public IFormFile? ProfileImage { get; set; }
