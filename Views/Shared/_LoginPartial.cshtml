@@ -1,5 +1,4 @@
-﻿@* Importa as funcionalidades de Entity Framework Core *@
-@using Microsoft.EntityFrameworkCore
+﻿@using Microsoft.EntityFrameworkCore
 
 @* Injeta a instância do contexto de base de dados para aceder a utilizadores *@
 @inject DWebProjetoFinal.Entities.AppDbContext _context
@@ -30,21 +29,19 @@
 
     @* Formulário para fazer logout com botão *@
     <form asp-controller="Account" asp-action="LogOut" method="post" id="logoutForm">
-        <button type="submit" class="btn logout-btn">
-            <i class="fas fa-play fa-flip-horizontal"></i> SAIR
-        </button>
+            <button type="submit" class="btn logout-btn btn-dark">SAIR</button>
     </form>
 </div>
 }
 else
 {
 @* Se o utilizador NÃO estiver autenticado, mostra botões de registo e login *@
-<ul class="nav navbar-nav navbar-right d-flex align-items-center">
-    <li class="me-2">
-        <a class="btn register-btn" asp-controller="Account" asp-action="Registration">REGISTAR</a>
-    </li>
-    <li>
-        <a class="btn login-btn" asp-controller="Account" asp-action="Login"> ENTRAR <i class="fas fa-play"></i></a>
-    </li>
-</ul>
+    <ul class="nav navbar-nav navbar-right d-flex align-items-center">
+        <li class="me-2">
+            <a class="btn btn-dark" asp-controller="Account" asp-action="Registration">REGISTAR</a>
+        </li>
+        <li>
+            <a class="btn btn-dark" asp-controller="Account" asp-action="Login">ENTRAR</a>
+        </li>
+    </ul>
 }
