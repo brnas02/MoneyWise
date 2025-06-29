@@ -130,15 +130,20 @@
                     <td>@transacao.Categoria</td>
                     <td>@transacao.Valor.ToString("N2") €</td>
                     <td>@transacao.Descricao</td>
-                    <td>
-                        <!-- Formulário de exclusão da transação com confirmação -->
-                        <form asp-action="Eliminar" method="post" onsubmit="return confirm('Tem a certeza que quer eliminar esta transação?');">
-                            <input type="hidden" name="id" value="@transacao.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
-                    </td>
+                        <td class="d-flex">
+                            <!-- Botão Editar -->
+                            <a asp-action="Editar" asp-route-id="@transacao.Id" class="btn btn-warning btn-sm me-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                            <!-- Botão Eliminar -->
+                            <form asp-action="Eliminar" method="post" onsubmit="return confirm('Tem a certeza que quer eliminar esta transação?');">
+                                <input type="hidden" name="id" value="@transacao.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
                 </tr>
                 }
             </tbody>

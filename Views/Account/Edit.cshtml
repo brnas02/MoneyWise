@@ -1,52 +1,55 @@
 ﻿@model DWebProjetoFinal.Entities.UserAccount
 
 @{
-    // Define o título da página e o layout partilhado a ser utilizado
     ViewData["Title"] = "Editar Perfil";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Editar Perfil</h1>
 
-<!-- Cartão com formatação visual usando Bootstrap -->
-<div class="card p-4 mt-4">
+<div class="card mb-4 border-0 shadow-sm mt-4">
+    <div class="card-body">
+        <form asp-controller="Account" asp-action="Edit" method="post" enctype="application/x-www-form-urlencoded" class="row g-3">
+            @Html.AntiForgeryToken()
 
-    <!-- Formulário para enviar os dados atualizados do perfil -->
-    <form asp-controller="Account" asp-action="Edit" method="post" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" asp-for="Id" />
 
-        @Html.AntiForgeryToken() <!-- Proteção contra ataques CSRF -->
+            <!-- Primeiro Nome -->
+            <div class="col-md-6">
+                <label asp-for="FirstName" class="form-label fw-bold">Primeiro Nome</label>
+                <input asp-for="FirstName" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
 
-        <input type="hidden" asp-for="Id" /> <!-- Campo oculto que mantém o ID do utilizador -->
-        <!-- Campo: Primeiro Nome -->
-        <div class="mb-3">
-            <label asp-for="FirstName" class="form-label">Primeiro Nome</label>
-            <input asp-for="FirstName" class="form-control" />
-        </div>
+            <!-- Último Nome -->
+            <div class="col-md-6">
+                <label asp-for="LastName" class="form-label fw-bold">Último Nome</label>
+                <input asp-for="LastName" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
 
-        <!-- Campo: Último Nome -->
-        <div class="mb-3">
-            <label asp-for="LastName" class="form-label">Último Nome</label>
-            <input asp-for="LastName" class="form-control" />
-        </div>
+            <!-- Email -->
+            <div class="col-md-6">
+                <label asp-for="Email" class="form-label fw-bold">Email</label>
+                <input asp-for="Email" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
 
-        <!-- Campo: Email -->
-        <div class="mb-3">
-            <label asp-for="Email" class="form-label">Email</label>
-            <input asp-for="Email" class="form-control" />
-        </div>
+            <!-- Nome de Utilizador -->
+            <div class="col-md-6">
+                <label asp-for="UserName" class="form-label fw-bold">Nome de Utilizador</label>
+                <input asp-for="UserName" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
 
-        <!-- Campo: Nome de Utilizador -->
-        <div class="mb-3">
-            <label asp-for="UserName" class="form-label">Nome de Utilizador</label>
-            <input asp-for="UserName" class="form-control" />
-        </div>
-
-        <!-- Botão de submissão do formulário -->
-        <button type="submit" class="btn btn-dark">Guardar Alterações</button>
-    </form>
+            <!-- Botão Guardar -->
+            <div class="col-md-3 offset-md-9">
+                <button type="submit" class="btn btn-dark w-100 py-2 fw-bold">GUARDAR ALTERAÇÕES</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 @section Scripts {
-    <!-- Inclusão dos scripts de validação de formulários (client-side) -->
     <partial name="_ValidationScriptsPartial" />
 }

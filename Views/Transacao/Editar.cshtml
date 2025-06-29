@@ -1,0 +1,68 @@
+﻿@model DWebProjetoFinal.Entities.Transacao
+
+@{
+    ViewData["Title"] = "Editar Transação";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Cartão com formulário de editar transação -->
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        <h4 class="mb-4">Editar Transação</h4>
+
+        <form asp-action="Editar" method="post" class="row g-3 align-items-end">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <!-- Tipo de transação -->
+            <div class="col-md-3">
+                <label asp-for="TipoTransacao" class="form-label fw-bold">Tipo</label>
+                <select asp-for="TipoTransacao" class="form-select border-0 border-bottom rounded-0" style="background: #f8f9fa;">
+                    <option value="Receita" selected="@Model.TipoTransacao == " Receita"">Receita</option>
+                    <option value="Despesa" selected="@Model.TipoTransacao == " Despesa"">Despesa</option>
+                </select>
+                <span asp-validation-for="TipoTransacao" class="text-danger"></span>
+            </div>
+
+            <!-- Categoria -->
+            <div class="col-md-3">
+                <label asp-for="Categoria" class="form-label fw-bold">Categoria</label>
+                <input asp-for="Categoria" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+                <span asp-validation-for="Categoria" class="text-danger"></span>
+            </div>
+
+            <!-- Valor -->
+            <div class="col-md-3">
+                <label asp-for="Valor" class="form-label fw-bold">Valor (€)</label>
+                <input asp-for="Valor" type="text" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+                <span asp-validation-for="Valor" class="text-danger"></span>
+            </div>
+
+            <!-- Data -->
+            <div class="col-md-3">
+                <label asp-for="Data" class="form-label fw-bold">Data</label>
+                <input asp-for="Data" type="date" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" />
+                <span asp-validation-for="Data" class="text-danger"></span>
+            </div>
+
+            <!-- Descrição -->
+            <div class="col-md-6">
+                <label asp-for="Descricao" class="form-label fw-bold">Descrição (Opcional)</label>
+                <input asp-for="Descricao" class="form-control border-0 border-bottom rounded-0" style="background: #f8f9fa;" placeholder="Inserir" />
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+
+            <!-- Botões -->
+            <div class="col-md-3 offset-md-9 d-flex justify-content-end">
+                <button type="submit" class="btn btn-dark w-100 py-2 fw-bold">GUARDAR ALTERAÇÕES</button>
+            </div>
+            <div class="col-md-3 offset-md-9 mt-2">
+                <a asp-action="Transacoes" class="btn btn-secondary w-100 py-2 fw-bold">CANCELAR</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

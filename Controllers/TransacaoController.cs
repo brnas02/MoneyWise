@@ -70,6 +70,48 @@ namespace DWebProjetoFinal.Controllers
             return RedirectToAction("Transacoes");
         }
 
+        // GET: Transacao/Editar
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var transacao = _context.UserTransacao
+                .Where(ut => ut.UserAccountId == userId && ut.TransacaoId == id)
+                .Select(ut => ut.Transacao)
+                .FirstOrDefault();
+
+            if (transacao == null)
+                return RedirectToAction("Transacoes");
+
+            return View(transacao);
+        }
+
+        // POST: Transacao/Editar
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Editar(Transacao model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var transacaoExistente = _context.Transacoes.FirstOrDefault(t => t.Id == model.Id);
+
+            if (transacaoExistente == null)
+                return RedirectToAction("Transacoes");
+
+            // Atualiza campos editáveis
+            transacaoExistente.TipoTransacao = model.TipoTransacao;
+            transacaoExistente.Categoria = model.Categoria;
+            transacaoExistente.Valor = model.Valor;
+            transacaoExistente.Descricao = model.Descricao;
+            transacaoExistente.Data = model.Data;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Transacoes");
+        }
+
         // Elimina uma transação com base no ID (apenas se pertencer ao utilizador)
         [HttpPost]
         [ValidateAntiForgeryToken]
