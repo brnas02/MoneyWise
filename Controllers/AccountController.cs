@@ -28,6 +28,7 @@ namespace DWebProjetoFinal.Controllers
             return View(_context.UserAccounts.ToList());
         }
 
+        // Retorna a view do formulário de registo
         [HttpGet]
         public IActionResult Registration()
         {
@@ -120,6 +121,7 @@ namespace DWebProjetoFinal.Controllers
             return View(model);
         }
 
+        // Retorna a view do formulário de login
         [HttpGet]
         public IActionResult Login()
         {
@@ -302,6 +304,7 @@ namespace DWebProjetoFinal.Controllers
             return RedirectToAction("AdminUserList");
         }
 
+        // Verifica se o ficheiro carregado é uma imagem válida
         private bool IsValidImage(IFormFile file)
         {
             try
@@ -310,14 +313,14 @@ namespace DWebProjetoFinal.Controllers
                 {
                     using (var image = Image.FromStream(stream))
                     {
-                        // Successfully loaded image
+                        // Imagem carregada com sucesso
                         return true;
                     }
                 }
             }
             catch
             {
-                // Not a valid image
+                // Não é uma imagem válida
                 return false;
             }
         }

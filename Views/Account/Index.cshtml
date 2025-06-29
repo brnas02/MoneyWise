@@ -1,18 +1,25 @@
 ﻿@model IEnumerable<DWebProjetoFinal.Entities.UserAccount>
 
 @{
+    // Define o título da página na aba do navegador
     ViewData["Title"] = "Index";
+    // Utiliza o layout padrão da aplicação
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<!-- Título principal da página -->
 <h1>Index</h1>
 
+<!-- Link para criação de novo utilizador -->
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<!-- Tabela com lista de utilizadores registados -->
 <table class="table">
     <thead>
         <tr>
+            <!-- Cabeçalhos da tabela gerados automaticamente a partir do modelo -->
             <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
@@ -31,7 +38,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        <!-- Iteração sobre todos os utilizadores para apresentar os seus dados -->
+        @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
@@ -49,6 +57,6 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
